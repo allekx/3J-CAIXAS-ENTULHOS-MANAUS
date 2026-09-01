@@ -1,34 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 3J Caixas Entulhos
 
-## Getting Started
+Sistema web para solicitação e atendimento de alocação de caixas coletoras de entulho em Manaus - AM.
 
-First, run the development server:
+O cliente preenche a solicitação pública, recebe um protocolo gerado no banco e pode continuar o contato pelo WhatsApp. A equipe opera o atendimento no painel administrativo: dados da caixa, valores, proposta em PDF e encaminhamento operacional.
+
+## Stack
+
+- Next.js 16 (App Router) e React 19
+- TypeScript
+- Tailwind CSS 4
+- Supabase (Auth, Postgres, RLS)
+- Zod
+- `@react-pdf/renderer` (proposta comercial em memória)
+- Lucide Icons
+
+## Instalação
+
+```bash
+npm install
+cp .env.example .env.local
+```
+
+Preencha `.env.local` com as chaves do projeto Supabase. Não commite esse arquivo.
+
+## Variáveis
+
+| Variável | Onde | Uso |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Browser e servidor | URL do projeto Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser e servidor | Chave anon (RLS bloqueia tabelas) |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Somente servidor** | Inserts e painel via API/server actions |
+| `NEXT_PUBLIC_COMPANY_WHATSAPP` | Browser | WhatsApp da empresa (DDI, só dígitos) |
+| `NEXT_PUBLIC_COMPANY_PHONE` | Browser | Telefone no PDF (opcional) |
+| `NEXT_PUBLIC_COMPANY_EMAIL` | Browser | E-mail no PDF (opcional) |
+
+Nunca prefixe `SUPABASE_SERVICE_ROLE_KEY` com `NEXT_PUBLIC_`.
+
+## Desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Rotas principais:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `/` — página inicial
+- `/confirmacao-alocacao` — solicitação pública
+- `/admin/login` — login administrativo
+- `/admin` — dashboard
+- `/admin/solicitacoes` — lista e detalhe
 
-## Learn More
+## Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run build
+npm start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Supabase
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Crie o projeto no Supabase.
+2. Execute `supabase/schema.sql` em um projeto novo **ou** as migrations em `supabase/migrations/` na ordem, se o banco já existir.
+3. Confirme RLS ativo nas tabelas `allocation_requests` e `allocation_protocol_counters`, sem políticas para `anon`/`authenticated`.
+4. Em Authentication:
+   - desative o cadastro público (sign-ups);
+   - crie os usuários administrativos manualmente no dashboard;
+   - não habilite recuperação de senha pública se não for necessário.
+5. Copie URL, anon key e service role key para `.env.local` (local) e para a Vercel (produção).
 
-## Deploy on Vercel
+O protocolo (`3J-AAAA-000000`) é gerado no banco. O cliente nunca envia protocolo, status, valores ou observações internas.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy (Vercel)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Publique o repositório no GitHub.
+2. Importe o projeto na Vercel (framework: Next.js).
+3. Cadastre as variáveis de ambiente em Production, Preview e Development.
+4. Faça o deploy. Não é necessário `vercel.json`.
+5. O PDF é gerado em runtime Node.js, em memória. Não usa Storage nem disco persistente.
+
+Após o deploy, teste o fluxo público e o login administrativo.

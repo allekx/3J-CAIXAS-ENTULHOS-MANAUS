@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-black: #111111;
+  --color-brand-gold: #c9a227;
+  --color-brand-gold-dark: #a6851c;
+  --color-brand-surface: #f4f4f5;
+  --color-brand-border: #e4e4e7;
+  --color-brand-muted: #52525b;
+  --color-brand-whatsapp: #15803d;
+  --color-brand-whatsapp-dark: #166534;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-width: 320px;
+}
