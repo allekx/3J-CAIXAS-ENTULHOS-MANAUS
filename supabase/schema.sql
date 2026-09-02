@@ -38,6 +38,7 @@ create table if not exists public.allocation_requests (
   status text not null default 'pending',
   customer_name text not null,
   customer_phone text not null,
+  customer_document text,
   street text not null,
   address_number text not null,
   complement text,
@@ -86,6 +87,14 @@ create table if not exists public.allocation_requests (
     check (char_length(customer_name) between 1 and 120),
   constraint allocation_requests_customer_phone_len
     check (char_length(customer_phone) between 10 and 20),
+  constraint allocation_requests_customer_document_check
+    check (
+      customer_document is null
+      or (
+        char_length(customer_document) in (11, 14)
+        and customer_document ~ '^[0-9]+$'
+      )
+    ),
   constraint allocation_requests_street_len
     check (char_length(street) between 1 and 180),
   constraint allocation_requests_address_number_len

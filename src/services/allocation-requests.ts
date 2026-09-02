@@ -13,6 +13,7 @@ export function toAllocationRequestInsert(
   return {
     customer_name: data.customer_name,
     customer_phone: data.customer_phone,
+    customer_document: data.customer_document,
     street: data.street,
     address_number: data.address_number,
     complement: data.complement,

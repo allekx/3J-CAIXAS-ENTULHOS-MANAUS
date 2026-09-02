@@ -323,7 +323,7 @@ export async function getAllocationRequestById(
   const { data, error } = await supabase
     .from("allocation_requests")
     .select(
-      "id, protocol, status, customer_name, customer_phone, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at",
+      "id, protocol, status, customer_name, customer_phone, customer_document, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at",
     )
     .eq("id", id)
     .maybeSingle();
@@ -347,6 +347,7 @@ export async function updateAllocationRequest(id: string, input: unknown) {
       status: data.status,
       customer_name: data.customer_name,
       customer_phone: data.customer_phone,
+      customer_document: data.customer_document,
       street: data.street,
       address_number: data.address_number,
       complement: data.complement,

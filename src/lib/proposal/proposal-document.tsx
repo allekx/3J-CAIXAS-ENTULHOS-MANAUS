@@ -302,6 +302,9 @@ export function ProposalPdfDocument({ data }: { data: ProposalPdfData }) {
             <DataField label="Telefone" value={data.customer.phone} />
           </View>
           <View style={styles.row}>
+            <DataField label="CPF/CNPJ" value={data.customer.document} />
+          </View>
+          <View style={styles.row}>
             <DataField label="Endereço" value={data.customer.address} wide />
           </View>
           <View style={[styles.row, styles.lastRow]}>

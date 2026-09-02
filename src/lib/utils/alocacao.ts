@@ -1,4 +1,5 @@
 import { isValidBrazilianPhone } from "@/lib/utils/phone";
+import { isValidCpfCnpj } from "@/lib/utils/document";
 import type {
   CustomerFormData,
   CustomerFormErrors,
@@ -15,6 +16,10 @@ export function getCustomerFormErrors(
 
   if (!isValidBrazilianPhone(data.phone)) {
     errors.phone = "Informe um telefone válido com DDD.";
+  }
+
+  if (!isValidCpfCnpj(data.document)) {
+    errors.document = "Informe um CPF ou CNPJ válido.";
   }
 
   if (!data.address.trim()) {

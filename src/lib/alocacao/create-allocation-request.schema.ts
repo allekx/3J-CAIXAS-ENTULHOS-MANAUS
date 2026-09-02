@@ -2,6 +2,7 @@ import { z } from "zod";
 import { ALLOCATION_FIELD_LIMITS } from "@/types/allocation-request";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import { isValidBrazilianPhone, onlyDigits } from "@/lib/utils/phone";
+import { isValidCpfCnpj } from "@/lib/utils/document";
 
 function sanitizeRequiredText(max: number) {
   return z
@@ -26,6 +27,13 @@ export const createAllocationRequestSchema = z
       .max(ALLOCATION_FIELD_LIMITS.customerPhone)
       .refine(isValidBrazilianPhone, {
         message: "Informe um telefone válido com DDD.",
+      })
+      .transform(onlyDigits),
+    customer_document: z
+      .string()
+      .max(18)
+      .refine(isValidCpfCnpj, {
+        message: "Informe um CPF ou CNPJ válido.",
       })
       .transform(onlyDigits),
     street: sanitizeRequiredText(ALLOCATION_FIELD_LIMITS.street),

@@ -29,6 +29,7 @@ import {
 } from "@/lib/money";
 import { proposalPdfFilename } from "@/lib/proposal/filename";
 import { formatRequestDate } from "@/lib/utils/alocacao";
+import { formatCpfCnpj, maskCpfCnpj } from "@/lib/utils/document";
 import { maskBrazilianPhone } from "@/lib/utils/phone";
 import type { UpdateAllocationRequestPayload } from "@/lib/alocacao/update-allocation-request.schema";
 
@@ -36,6 +37,7 @@ type FormState = {
   status: AllocationRequestStatus;
   customer_name: string;
   customer_phone: string;
+  customer_document: string;
   street: string;
   address_number: string;
   complement: string;
@@ -64,6 +66,7 @@ function toFormState(request: AllocationRequestRow): FormState {
     status: request.status,
     customer_name: request.customer_name,
     customer_phone: maskBrazilianPhone(request.customer_phone),
+    customer_document: formatCpfCnpj(request.customer_document ?? ""),
     street: request.street,
     address_number: request.address_number,
     complement: request.complement ?? "",
@@ -167,6 +170,7 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
         status: form.status,
         customer_name: form.customer_name,
         customer_phone: form.customer_phone,
+        customer_document: form.customer_document,
         street: form.street,
         address_number: form.address_number,
         complement: form.complement,
@@ -266,6 +270,7 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
     protocol: request.protocol,
     customer_name: form.customer_name,
     customer_phone: form.customer_phone,
+    customer_document: form.customer_document,
     street: form.street,
     address_number: form.address_number,
     complement: form.complement,
@@ -310,7 +315,7 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
             />
           </Field>
 
-          <div className="min-w-0">
+            <div className="min-w-0">
             <Field
               id="customer_phone"
               label="Telefone"
@@ -333,6 +338,24 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
               <PhoneActions phone={form.customer_phone} />
             </div>
           </div>
+
+          <Field
+            id="customer_document"
+            label="CPF/CNPJ"
+            required
+            error={fieldErrors.customer_document}
+          >
+            <TextInput
+              id="customer_document"
+              name="customer_document"
+              inputMode="numeric"
+              value={form.customer_document}
+              error={fieldErrors.customer_document}
+              onChange={(value) =>
+                patchForm({ customer_document: maskCpfCnpj(value) })
+              }
+            />
+          </Field>
 
           <Field id="street" label="Endereço" required error={fieldErrors.street}>
             <TextInput

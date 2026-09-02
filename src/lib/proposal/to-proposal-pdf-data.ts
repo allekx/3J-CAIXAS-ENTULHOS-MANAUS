@@ -2,6 +2,7 @@ import { COMPANY, getCompanyContactLines } from "@/constants/company";
 import { formatIsoDatePtBr } from "@/lib/alocacao/dates";
 import { calculateProposalTotal, formatMoneyBrl } from "@/lib/money";
 import { maskBrazilianPhone } from "@/lib/utils/phone";
+import { formatCpfCnpj } from "@/lib/utils/document";
 import type { AllocationRequestRow } from "@/types/allocation-request";
 
 const EMPTY = "—";
@@ -16,6 +17,7 @@ export type ProposalPdfData = {
   customer: {
     name: string;
     phone: string;
+    document: string;
     address: string;
     condominium: string;
     neighborhood: string;
@@ -87,6 +89,7 @@ export function toProposalPdfData(
     customer: {
       name: displayText(request.customer_name),
       phone: displayText(maskBrazilianPhone(request.customer_phone)),
+      document: displayText(formatCpfCnpj(request.customer_document ?? "")),
       address: displayText(formatAddress(request)),
       condominium: displayText(request.condominium),
       neighborhood: displayText(request.neighborhood),

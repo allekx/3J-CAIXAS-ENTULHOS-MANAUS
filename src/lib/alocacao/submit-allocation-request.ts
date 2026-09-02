@@ -17,6 +17,7 @@ export function toPublicAllocationPayload(
   return {
     customer_name: data.responsibleName,
     customer_phone: data.phone,
+    customer_document: data.document,
     street: data.address,
     address_number: data.number,
     complement: data.complement,

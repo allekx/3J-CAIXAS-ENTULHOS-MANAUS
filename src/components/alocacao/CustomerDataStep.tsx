@@ -8,6 +8,7 @@ import { WHATSAPP_LOCATION_INFO } from "@/constants/alocacao";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import type { CustomerFormData } from "@/types/alocacao";
 import { getCustomerFormErrors } from "@/lib/utils/alocacao";
+import { maskCpfCnpj } from "@/lib/utils/document";
 import { maskBrazilianPhone } from "@/lib/utils/phone";
 import { cn } from "@/lib/utils/cn";
 
@@ -88,6 +89,27 @@ export function CustomerDataStep({
                 error={errors.phone}
                 onChange={(value) =>
                   onChange({ phone: maskBrazilianPhone(value) })
+                }
+              />
+            </Field>
+          </div>
+
+          <div className="sm:col-span-6">
+            <Field
+              id="document"
+              label="CPF/CNPJ"
+              required
+              error={errors.document}
+            >
+              <TextInput
+                id="document"
+                name="document"
+                inputMode="numeric"
+                value={data.document}
+                autoComplete="off"
+                error={errors.document}
+                onChange={(value) =>
+                  onChange({ document: maskCpfCnpj(value) })
                 }
               />
             </Field>

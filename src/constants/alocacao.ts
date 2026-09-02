@@ -5,6 +5,7 @@ import { onlyDigits } from "@/lib/utils/phone";
 export const INITIAL_CUSTOMER_FORM: CustomerFormData = {
   responsibleName: "",
   phone: "",
+  document: "",
   address: "",
   number: "",
   complement: "",

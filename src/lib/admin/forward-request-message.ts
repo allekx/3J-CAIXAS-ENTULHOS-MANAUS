@@ -6,6 +6,7 @@ import {
   maskBrazilianPhone,
   toWhatsAppNumber,
 } from "@/lib/utils/phone";
+import { formatCpfCnpj } from "@/lib/utils/document";
 import type { AllocationRequestStatus } from "@/types/allocation-request";
 
 /**
@@ -16,6 +17,7 @@ export type ForwardRequestMessageInput = {
   protocol: string;
   customer_name: string;
   customer_phone: string;
+  customer_document: string;
   street: string;
   address_number: string;
   complement: string | null;
@@ -80,6 +82,7 @@ export function buildForwardRequestMessage(input: ForwardRequestMessageInput) {
     "CLIENTE",
     `Nome: ${display(input.customer_name)}`,
     `Telefone: ${display(maskBrazilianPhone(input.customer_phone))}`,
+    `CPF/CNPJ: ${display(formatCpfCnpj(input.customer_document))}`,
     "",
     "LOCAL",
     `Endereço: ${display(input.street)}, ${display(input.address_number)}`,

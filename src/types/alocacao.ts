@@ -13,6 +13,7 @@ export type AllocationStep = 1 | 2 | 3;
 export type CustomerFormData = {
   responsibleName: string;
   phone: string;
+  document: string;
   address: string;
   number: string;
   complement: string;

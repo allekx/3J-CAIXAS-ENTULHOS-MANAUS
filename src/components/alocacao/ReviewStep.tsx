@@ -9,6 +9,7 @@ import {
   type PublicBoxDetails,
 } from "@/lib/alocacao/public-request-view";
 import { formatFullAddress } from "@/lib/utils/alocacao";
+import { formatCpfCnpj } from "@/lib/utils/document";
 import { cn } from "@/lib/utils/cn";
 import type { CustomerFormData } from "@/types/alocacao";
 
@@ -86,6 +87,7 @@ export function ReviewStep({
             value={data.responsibleName}
           />
           <ReviewRow label="Telefone / WhatsApp" value={data.phone} />
+          <ReviewRow label="CPF/CNPJ" value={formatCpfCnpj(data.document)} />
           <ReviewRow label="Endereço completo" value={formatFullAddress(data)} />
           <ReviewRow label="Bairro" value={data.neighborhood} />
           <ReviewRow

@@ -15,6 +15,7 @@ export type AllocationRequestStatus = (typeof ALLOCATION_STATUSES)[number];
 export const ALLOCATION_FIELD_LIMITS = {
   customerName: 120,
   customerPhone: 20,
+  customerDocument: 14,
   street: 180,
   addressNumber: 20,
   complement: 80,
@@ -34,6 +35,7 @@ export type AllocationRequestRow = {
   status: AllocationRequestStatus;
   customer_name: string;
   customer_phone: string;
+  customer_document: string | null;
   street: string;
   address_number: string;
   complement: string | null;
@@ -64,6 +66,7 @@ export type AllocationRequestInsert = {
   status?: AllocationRequestStatus;
   customer_name: string;
   customer_phone: string;
+  customer_document: string;
   street: string;
   address_number: string;
   complement?: string | null;
@@ -93,6 +96,7 @@ export type AllocationRequestUpdate = Partial<AllocationRequestInsert>;
 export type PublicAllocationRequestPayload = {
   customer_name: string;
   customer_phone: string;
+  customer_document: string;
   street: string;
   address_number: string;
   complement: string;
