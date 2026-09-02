@@ -1,4 +1,4 @@
-import { Box, MessageCircle, Play, Star } from "lucide-react";
+import { Box, Globe, MessageCircle, Play, Star } from "lucide-react";
 import { BIO_LINKS } from "@/constants/bio";
 import { BioLinkButton } from "@/components/bio/BioLinkButton";
 
@@ -50,6 +50,13 @@ export function BioLinks() {
             ? "Canal no YouTube"
             : "Canal no YouTube — link em configuração"
         }
+      />
+
+      <BioLinkButton
+        href={BIO_LINKS.website}
+        title="Ir para o site"
+        subtitle="Conheça a 3J Caixas Entulhos Manaus"
+        icon={Globe}
       />
     </nav>
   );

@@ -35,6 +35,7 @@ export const BIO_LINKS = {
   whatsapp: BIO_WHATSAPP_URL,
   googleReview: GOOGLE_REVIEW_URL,
   youtube: YOUTUBE_URL,
+  website: ROUTES.home,
   googleMaps: GOOGLE_MAPS_PLACE_URL,
   instagram: HOME_COMPANY.instagramUrl,
 } as const;
