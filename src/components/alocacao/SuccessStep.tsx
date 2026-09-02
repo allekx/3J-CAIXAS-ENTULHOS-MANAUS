@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { MessageCircle, ShieldCheck } from "lucide-react";
-import { getWhatsAppConversationUrl, PRIVACY_HREF } from "@/constants/alocacao";
+import { getWhatsAppConversationUrl, PRIVACY_HREF, WHATSAPP_LOCATION_INFO } from "@/constants/alocacao";
 import { ROUTES } from "@/constants/site";
 
 type SuccessStepProps = {
@@ -53,6 +53,9 @@ export function SuccessStep({ protocol, submittedAt }: SuccessStepProps) {
         <p className="mt-1 text-sm leading-relaxed text-brand-muted">
           Nossa equipe irá analisar os dados e entrar em contato para confirmar
           os detalhes da entrega.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-brand-muted">
+          {WHATSAPP_LOCATION_INFO.successMessage}
         </p>
       </aside>
 

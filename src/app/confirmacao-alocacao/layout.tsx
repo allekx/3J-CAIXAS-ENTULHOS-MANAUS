@@ -7,7 +7,7 @@ export default function ConfirmacaoAlocacaoLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-h-dvh flex-col bg-brand-surface">
+    <div className="flex min-h-dvh flex-col bg-white">
       <AllocationHeader />
       <main className="flex-1">{children}</main>
     </div>

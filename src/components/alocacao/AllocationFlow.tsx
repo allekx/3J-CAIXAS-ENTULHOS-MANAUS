@@ -68,7 +68,7 @@ export function AllocationFlow() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[800px] px-4 py-6 sm:px-6 sm:py-10">
+    <div className="mx-auto w-full max-w-[800px] px-4 py-5 sm:px-6 sm:py-8">
       <AllocationStepper currentStep={step} />
 
       {step === 1 ? (

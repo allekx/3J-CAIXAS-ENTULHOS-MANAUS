@@ -1,0 +1,234 @@
+import { COLLECTOR_BOX_DEFAULTS } from "@/constants/alocacao";
+import { ROUTES } from "@/constants/site";
+import { onlyDigits } from "@/lib/utils/phone";
+
+export const HOME_COMPANY = {
+  legalName: "Jadaildo da Silva Gomes",
+  commercialName: "3J Caixas Entulhos Manaus",
+  shortName: "3J Caixas Entulhos",
+  municipalRegistration: "702250001",
+  address: {
+    street: "Avenida do Cetur",
+    neighborhood: "Tarumã",
+    city: "Manaus",
+    state: "AM",
+    full: "Avenida do Cetur – Tarumã\nManaus – AM",
+    line: "Avenida do Cetur – Tarumã, Manaus – AM",
+  },
+  instagram: "@3JCAIXASENTULHOSMANAUS",
+  instagramUrl: "https://www.instagram.com/3JCAIXASENTULHOSMANAUS",
+  email: "jadaildodasilvagomes@gmail.com",
+  phoneDisplay: "(92) 98594-6242",
+  phoneDigits: "5592985946242",
+  website: "3JCAIXASENTULHOSMANAUS.COM.BR",
+} as const;
+
+export const HOME_IMAGES = {
+  hero: {
+    src: "/images/3j/3j-caixa-coletora-6m3-manaus.png",
+    width: 844,
+    height: 562,
+    alt: "Caixa coletora de entulho de 6 m³ da 3J Caixas Entulhos Manaus",
+  },
+  obra: {
+    src: "/images/3j/3j-caixa-entulho-obra-manaus.png",
+    width: 844,
+    height: 474,
+    alt: "Caixa coletora de entulho utilizada em obra em Manaus",
+  },
+  rua: {
+    src: "/images/3j/3j-caixa-coletora-entulho-manaus.png",
+    width: 844,
+    height: 475,
+    alt: "Caixa coletora azul da 3J Caixas Entulhos em área urbana de Manaus",
+  },
+} as const;
+
+export const HOME_NAV = [
+  { label: "Início", href: "#inicio" },
+  { label: "Serviço", href: "#servico" },
+  { label: "Locação", href: "#locacao" },
+  { label: "Como funciona", href: "#como-funciona" },
+  { label: "Sobre", href: "#sobre" },
+  { label: "Localização", href: "#localizacao" },
+  { label: "FAQ", href: "#faq" },
+] as const;
+
+export const HOME_SERVICE_APPLICATIONS = [
+  "Construções",
+  "Reformas",
+  "Demolições",
+  "Limpezas",
+  "Retirada de resíduos de obra",
+] as const;
+
+export const HOME_TRUST_ITEMS = [
+  {
+    title: "6 m³",
+    description: "Capacidade da caixa",
+  },
+  {
+    title: "3 dias úteis",
+    description: "Período de permanência",
+  },
+  {
+    title: "Manaus",
+    description: "Área de atendimento",
+  },
+  {
+    title: "Atendimento rápido",
+    description: "Via WhatsApp",
+  },
+] as const;
+
+export const HOME_HERO_TRUST = [
+  "6 m³ de capacidade",
+  "3 dias úteis",
+  "Manaus",
+] as const;
+
+export const HOME_DUMPSTER_HIGHLIGHTS = [
+  { label: "Capacidade", value: COLLECTOR_BOX_DEFAULTS.boxSize },
+  { label: "Permanência", value: "3 dias úteis" },
+  { label: "Atendimento", value: "Manaus" },
+  {
+    label: "Indicada para",
+    value: "Obras, reformas e limpezas",
+  },
+] as const;
+
+export const HOME_STEPS = [
+  {
+    step: "01",
+    title: "Faça sua solicitação",
+    description:
+      "Preencha seus dados e informe o local onde a caixa será utilizada.",
+  },
+  {
+    step: "02",
+    title: "Confirmamos os detalhes",
+    description:
+      "Nossa equipe analisa a solicitação e entra em contato para confirmar entrega e demais informações.",
+  },
+  {
+    step: "03",
+    title: "Receba a caixa coletora",
+    description:
+      "A caixa é entregue no endereço combinado e permanece por até 3 dias úteis conforme as condições do serviço.",
+  },
+] as const;
+
+export const HOME_BENEFITS = [
+  {
+    title: "Praticidade para sua obra",
+    description: "Organize o descarte de resíduos com mais agilidade no canteiro.",
+  },
+  {
+    title: "Entrega e retirada organizadas",
+    description: "Fluxo simples para receber e devolver a caixa coletora.",
+  },
+  {
+    title: "Caixa coletora de 6 m³",
+    description: "Capacidade adequada para diferentes tipos de serviço.",
+  },
+  {
+    title: "Atendimento em Manaus",
+    description: "Empresa local com contato direto pelo WhatsApp.",
+  },
+] as const;
+
+export const HOME_GALLERY = [
+  {
+    ...HOME_IMAGES.obra,
+    caption: "Caixa coletora em operação em obra",
+  },
+  {
+    ...HOME_IMAGES.rua,
+    caption: "Atendimento em área urbana de Manaus",
+  },
+] as const;
+
+export const HOME_MAPS = {
+  searchUrl:
+    "https://www.google.com/maps/search/?api=1&query=Avenida+do+Cetur,+Tarum%C3%A3,+Manaus+-+AM",
+  embedUrl:
+    "https://maps.google.com/maps?q=Avenida+do+Cetur,+Tarum%C3%A3,+Manaus+-+AM&z=15&output=embed",
+} as const;
+
+export const HOME_WHATSAPP_MESSAGES = {
+  hero: "Olá! Gostaria de solicitar uma caixa coletora de 6 m³ em Manaus.",
+  floating:
+    "Olá! Gostaria de solicitar uma caixa coletora de 6 m³ em Manaus.",
+} as const;
+
+export const HOME_FAQ = [
+  {
+    question: "Qual o tamanho da caixa coletora da 3J?",
+    answer: "A 3J Caixas Entulhos trabalha com caixa coletora de 6 m³.",
+  },
+  {
+    question: "Por quanto tempo a caixa coletora fica na obra?",
+    answer:
+      "A permanência padrão informada pela empresa é de 3 dias úteis.",
+  },
+  {
+    question: "Para quais tipos de serviço posso solicitar uma caixa coletora?",
+    answer:
+      "A caixa pode ser utilizada em obras, reformas, demolições e serviços de limpeza que necessitem de espaço adequado para os resíduos.",
+  },
+  {
+    question: "A 3J Caixas Entulhos atende Manaus?",
+    answer:
+      "Sim. A empresa está localizada em Manaus, no bairro Tarumã, e realiza atendimento em Manaus e região.",
+  },
+  {
+    question: "Como solicitar uma caixa coletora?",
+    answer:
+      "O cliente pode preencher a solicitação online pela página de confirmação de alocação ou entrar em contato pelo WhatsApp.",
+  },
+  {
+    question: "Como faço para saber a disponibilidade?",
+    answer:
+      "Envie uma solicitação pelo site ou entre em contato pelo WhatsApp para que a equipe analise a necessidade e confirme os detalhes.",
+  },
+] as const;
+
+export function getHomeWhatsAppNumber() {
+  const fromEnv = onlyDigits(process.env.NEXT_PUBLIC_COMPANY_WHATSAPP ?? "");
+
+  if (fromEnv.length >= 10) {
+    return fromEnv.startsWith("55") ? fromEnv : `55${fromEnv}`;
+  }
+
+  return HOME_COMPANY.phoneDigits;
+}
+
+export function getHomeWhatsAppUrl(message: string) {
+  const phone = getHomeWhatsAppNumber();
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+}
+
+export const HOME_CTA = {
+  label: "Solicitar caixa coletora",
+  shortLabel: "Solicitar caixa",
+  href: ROUTES.confirmacaoAlocacao,
+  dumpsterLabel: "Solicitar caixa de 6 m³",
+  nowLabel: "Solicitar agora",
+} as const;
+
+export const HOME_METADATA = {
+  title: "3J Caixas Entulhos Manaus | Caixa Coletora de Entulho 6 m³",
+  description:
+    "Caixa coletora de entulho de 6 m³ em Manaus para obras, reformas e limpezas. Solicite a alocação da sua caixa coletora com a 3J Caixas Entulhos Manaus.",
+  keywords: [
+    "caixa coletora Manaus",
+    "caixa coletora de entulhos Manaus",
+    "caixa de entulho Manaus",
+    "locação de caixa coletora Manaus",
+    "alocação de caixa coletora Manaus",
+    "caixa coletora 6m³ Manaus",
+    "caixa para obra Manaus",
+    "entulho Manaus",
+    "3J Caixas Entulhos Manaus",
+  ],
+} as const;

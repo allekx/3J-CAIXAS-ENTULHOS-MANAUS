@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { Info } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Field, SelectInput, TextInput } from "@/components/ui/Field";
+import { WHATSAPP_LOCATION_INFO } from "@/constants/alocacao";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import type { CustomerFormData } from "@/types/alocacao";
 import { getCustomerFormErrors } from "@/lib/utils/alocacao";
@@ -173,6 +175,24 @@ export function CustomerDataStep({
                 onChange={(value) => onChange({ city: value })}
               />
             </Field>
+          </div>
+
+          <div className="sm:col-span-6">
+            <aside className="flex items-start gap-3 border border-brand-gold bg-zinc-50 p-4">
+              <Info
+                aria-hidden="true"
+                className="mt-0.5 size-5 shrink-0 text-brand-gold-dark"
+                strokeWidth={1.75}
+              />
+              <div>
+                <h2 className="text-sm font-semibold text-brand-black">
+                  {WHATSAPP_LOCATION_INFO.stepTitle}
+                </h2>
+                <p className="mt-1 text-sm leading-relaxed text-brand-muted">
+                  {WHATSAPP_LOCATION_INFO.stepMessage}
+                </p>
+              </div>
+            </aside>
           </div>
 
           <div className="sm:col-span-3">

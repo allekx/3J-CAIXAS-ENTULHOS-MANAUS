@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
+import { COLLECTOR_BOX_INFO } from "@/constants/alocacao";
 import { formatIsoDatePtBr } from "@/lib/alocacao/dates";
 import {
   hasPublicBoxDetails,
@@ -100,8 +101,23 @@ export function ReviewStep({
         <h2 className="text-xs font-semibold tracking-[0.14em] text-brand-gold-dark uppercase">
           Dados da caixa coletora
         </h2>
+        <dl className="mt-2">
+          <ReviewRow label="Tamanho" value={COLLECTOR_BOX_INFO.size} />
+          <ReviewRow
+            label="Permanência na obra"
+            value={COLLECTOR_BOX_INFO.stayPeriod}
+          />
+          <ReviewRow
+            label="Retirada antecipada"
+            value={COLLECTOR_BOX_INFO.earlyPickup}
+          />
+        </dl>
+        <p className="mt-3 border-t border-brand-border pt-3 text-sm leading-relaxed text-brand-muted">
+          <span className="font-semibold text-brand-black">Obs.:</span>{" "}
+          {COLLECTOR_BOX_INFO.extraDaysNote}
+        </p>
         {hasPublicBoxDetails(boxDetails) ? (
-          <dl className="mt-2">
+          <dl className="mt-4 border-t border-brand-border pt-2">
             {boxDetails.boxType || boxDetails.boxSize ? (
               <ReviewRow
                 label="Tipo / Tamanho da caixa"
@@ -143,12 +159,7 @@ export function ReviewStep({
               />
             ) : null}
           </dl>
-        ) : (
-          <p className="mt-3 text-sm leading-relaxed text-brand-muted">
-            Os detalhes da caixa coletora serão definidos após a análise da
-            nossa equipe.
-          </p>
-        )}
+        ) : null}
       </article>
 
       <article className="mt-4 border border-brand-border bg-white p-4 sm:p-6">

@@ -1,35 +1,87 @@
-import { Box } from "lucide-react";
-import { SITE } from "@/constants/site";
+import type { Metadata } from "next";
+import { Oswald } from "next/font/google";
+import { About } from "@/components/home/About";
+import { Benefits } from "@/components/home/Benefits";
+import { ConversionCTA } from "@/components/home/ConversionCTA";
+import { DumpsterSection } from "@/components/home/DumpsterSection";
+import { FaqSection } from "@/components/home/FaqSection";
+import { Footer } from "@/components/home/Footer";
+import { Header } from "@/components/home/Header";
+import { Hero } from "@/components/home/Hero";
+import { HomeStructuredData } from "@/components/home/HomeStructuredData";
+import { HowItWorks } from "@/components/home/HowItWorks";
+import { Location } from "@/components/home/Location";
+import { RentalSection } from "@/components/home/RentalSection";
+import { ServiceGallery } from "@/components/home/ServiceGallery";
+import { ServiceSection } from "@/components/home/ServiceSection";
+import { TrustBar } from "@/components/home/TrustBar";
+import { WhatsAppButton } from "@/components/home/WhatsAppButton";
+import { HOME_IMAGES, HOME_METADATA } from "@/constants/home";
+import { getSiteUrl } from "@/lib/seo/site-url";
 
-export default function Home() {
+const oswald = Oswald({
+  subsets: ["latin"],
+  variable: "--font-oswald",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(getSiteUrl()),
+  title: HOME_METADATA.title,
+  description: HOME_METADATA.description,
+  keywords: [...HOME_METADATA.keywords],
+  alternates: {
+    canonical: "/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    title: HOME_METADATA.title,
+    description: HOME_METADATA.description,
+    locale: "pt_BR",
+    type: "website",
+    url: "/",
+    siteName: "3J Caixas Entulhos Manaus",
+    images: [
+      {
+        url: HOME_IMAGES.hero.src,
+        width: HOME_IMAGES.hero.width,
+        height: HOME_IMAGES.hero.height,
+        alt: HOME_IMAGES.hero.alt,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: HOME_METADATA.title,
+    description: HOME_METADATA.description,
+    images: [HOME_IMAGES.hero.src],
+  },
+};
+
+export default function HomePage() {
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
-      <p className="text-xs font-semibold tracking-[0.16em] text-brand-gold-dark uppercase">
-        Sistema de alocação
-      </p>
-      <h1 className="mt-3 max-w-xl text-2xl font-semibold tracking-tight text-brand-black sm:text-3xl">
-        {SITE.name}
-      </h1>
-      <p className="mt-4 max-w-xl text-sm leading-relaxed text-brand-muted sm:text-base">
-        {SITE.description}
-      </p>
-
-      <section className="mt-8 max-w-xl border border-brand-border bg-brand-surface p-4 sm:p-6">
-        <div className="flex items-start gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center border border-brand-border bg-white text-brand-gold-dark">
-            <Box aria-hidden="true" className="size-5" strokeWidth={1.75} />
-          </span>
-          <div className="min-w-0">
-            <h2 className="text-sm font-semibold text-brand-black sm:text-base">
-              Alocação de caixas
-            </h2>
-            <p className="mt-1 text-sm leading-relaxed text-brand-muted">
-              Use este sistema para solicitar a alocação de caixas coletoras de
-              entulho de forma organizada e segura.
-            </p>
-          </div>
-        </div>
-      </section>
+    <div className={`${oswald.variable} bg-white text-landing-black antialiased`}>
+      <HomeStructuredData />
+      <Header />
+      <main>
+        <Hero />
+        <TrustBar />
+        <ServiceSection />
+        <RentalSection />
+        <DumpsterSection />
+        <HowItWorks />
+        <ServiceGallery />
+        <Benefits />
+        <About />
+        <Location />
+        <FaqSection />
+        <ConversionCTA />
+      </main>
+      <Footer />
+      <WhatsAppButton />
     </div>
   );
 }

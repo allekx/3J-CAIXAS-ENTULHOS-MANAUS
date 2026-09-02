@@ -11,13 +11,23 @@ import {
 import type { AllocationRequestRow } from "@/types/allocation-request";
 
 async function readLogoDataUri() {
-  try {
-    const filePath = path.join(process.cwd(), "public", "logos", "logo-3j.png");
-    const buffer = await readFile(filePath);
-    return `data:image/png;base64,${buffer.toString("base64")}`;
-  } catch {
-    return null;
+  const candidates = [
+    path.join(process.cwd(), "public", "logos", "logo-3j-oficial.jpg"),
+    path.join(process.cwd(), "public", "logos", "logo-3j.png"),
+  ];
+
+  for (const filePath of candidates) {
+    try {
+      const buffer = await readFile(filePath);
+      const extension = path.extname(filePath).toLowerCase();
+      const mime = extension === ".png" ? "image/png" : "image/jpeg";
+      return `data:${mime};base64,${buffer.toString("base64")}`;
+    } catch {
+      continue;
+    }
   }
+
+  return null;
 }
 
 export async function renderProposalPdf(request: AllocationRequestRow) {

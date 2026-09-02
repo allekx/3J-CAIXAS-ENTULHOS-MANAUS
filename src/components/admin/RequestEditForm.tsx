@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Field, TextArea, TextInput } from "@/components/ui/Field";
 import { updateAllocationRequestAction } from "@/app/admin/(panel)/solicitacoes/actions";
 import { ALLOCATION_STATUS_LABELS } from "@/constants/allocation-status";
+import { COLLECTOR_BOX_DEFAULTS } from "@/constants/alocacao";
 import { adminSolicitacaoPropostaPath } from "@/constants/site";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import { ALLOCATION_STATUSES } from "@/types/allocation-request";
@@ -70,10 +71,14 @@ function toFormState(request: AllocationRequestRow): FormState {
     condominium: request.condominium ?? "",
     city: request.city,
     payment_method: request.payment_method,
-    box_type: request.box_type ?? "",
-    box_size: request.box_size ?? "",
-    quantity: request.quantity ? String(request.quantity) : "",
-    rental_days: request.rental_days ? String(request.rental_days) : "",
+    box_type: request.box_type?.trim() || COLLECTOR_BOX_DEFAULTS.boxType,
+    box_size: request.box_size?.trim() || COLLECTOR_BOX_DEFAULTS.boxSize,
+    quantity: request.quantity
+      ? String(request.quantity)
+      : String(COLLECTOR_BOX_DEFAULTS.quantity),
+    rental_days: request.rental_days
+      ? String(request.rental_days)
+      : String(COLLECTOR_BOX_DEFAULTS.rentalDays),
     delivery_date: request.delivery_date ?? "",
     pickup_date: request.pickup_date ?? "",
     admin_notes: request.admin_notes ?? "",
