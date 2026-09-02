@@ -91,7 +91,7 @@ create table if not exists public.allocation_requests (
     check (
       customer_document is null
       or (
-        char_length(customer_document) in (11, 14)
+        char_length(customer_document) = 14
         and customer_document ~ '^[0-9]+$'
       )
     ),
@@ -134,7 +134,7 @@ create table if not exists public.allocation_requests (
 );
 
 comment on table public.allocation_requests is
-  'Solicitações de alocação de caixas coletoras. Acesso público somente via API server-side.';
+  'Solicitações de locação de caixas coletoras. Acesso público somente via API server-side.';
 
 comment on column public.allocation_requests.protocol is
   'Identificador público único gerado no banco. Formato 3J-AAAA-000000.';

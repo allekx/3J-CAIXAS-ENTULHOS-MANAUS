@@ -12,7 +12,7 @@ import {
   roundMoney,
 } from "@/lib/money";
 import { isValidBrazilianPhone, onlyDigits } from "@/lib/utils/phone";
-import { isValidCpfCnpj } from "@/lib/utils/document";
+import { isValidCnpj } from "@/lib/utils/document";
 
 function sanitizeRequiredText(max: number) {
   return z
@@ -70,6 +70,16 @@ function optionalIsoDate(message: string) {
     });
 }
 
+function optionalCnpjField() {
+  return z
+    .union([z.string(), z.null(), z.undefined()])
+    .transform((value) => onlyDigits(String(value ?? "")))
+    .transform((value) => (value.length === 0 ? null : value))
+    .refine((value) => value === null || isValidCnpj(value), {
+      message: "Informe um CNPJ válido.",
+    });
+}
+
 export const updateAllocationRequestSchema = z
   .object({
     status: z.enum(ALLOCATION_STATUSES),
@@ -81,13 +91,7 @@ export const updateAllocationRequestSchema = z
         message: "Informe um telefone válido com DDD.",
       })
       .transform(onlyDigits),
-    customer_document: z
-      .string()
-      .max(18)
-      .refine(isValidCpfCnpj, {
-        message: "Informe um CPF ou CNPJ válido.",
-      })
-      .transform(onlyDigits),
+    customer_document: optionalCnpjField(),
     street: sanitizeRequiredText(ALLOCATION_FIELD_LIMITS.street),
     address_number: sanitizeRequiredText(ALLOCATION_FIELD_LIMITS.addressNumber),
     complement: sanitizeOptionalText(ALLOCATION_FIELD_LIMITS.complement),

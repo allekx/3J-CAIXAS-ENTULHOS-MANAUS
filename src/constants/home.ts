@@ -156,9 +156,9 @@ export const HOME_MAPS = {
 } as const;
 
 export const HOME_WHATSAPP_MESSAGES = {
-  hero: "Olá! Gostaria de solicitar uma caixa coletora de 6 m³ em Manaus.",
+  hero: "Olá, gostaria de solicitar um orçamento de uma caixa coletora",
   floating:
-    "Olá! Gostaria de solicitar uma caixa coletora de 6 m³ em Manaus.",
+    "Olá, gostaria de solicitar um orçamento de uma caixa coletora",
 } as const;
 
 export const HOME_FAQ = [
@@ -184,7 +184,7 @@ export const HOME_FAQ = [
   {
     question: "Como solicitar uma caixa coletora?",
     answer:
-      "O cliente pode preencher a solicitação online pela página de confirmação de alocação ou entrar em contato pelo WhatsApp.",
+      "O cliente pode preencher a solicitação online pela página de confirmação de locação ou entrar em contato pelo WhatsApp.",
   },
   {
     question: "Como faço para saber a disponibilidade?",
@@ -219,13 +219,12 @@ export const HOME_CTA = {
 export const HOME_METADATA = {
   title: "3J Caixas Entulhos Manaus | Caixa Coletora de Entulho 6 m³",
   description:
-    "Caixa coletora de entulho de 6 m³ em Manaus para obras, reformas e limpezas. Solicite a alocação da sua caixa coletora com a 3J Caixas Entulhos Manaus.",
+    "Caixa coletora de entulho de 6 m³ em Manaus para obras, reformas e limpezas. Solicite a locação da sua caixa coletora com a 3J Caixas Entulhos Manaus.",
   keywords: [
     "caixa coletora Manaus",
     "caixa coletora de entulhos Manaus",
     "caixa de entulho Manaus",
     "locação de caixa coletora Manaus",
-    "alocação de caixa coletora Manaus",
     "caixa coletora 6m³ Manaus",
     "caixa para obra Manaus",
     "entulho Manaus",

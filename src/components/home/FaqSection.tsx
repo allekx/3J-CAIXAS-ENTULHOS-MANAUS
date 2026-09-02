@@ -25,7 +25,7 @@ export function FaqSection() {
                     href={HOME_CTA.href}
                     className="font-medium text-landing-black underline-offset-4 hover:underline"
                   >
-                    página de confirmação de alocação
+                    página de confirmação de locação
                   </Link>{" "}
                   ou entrar em contato pelo WhatsApp.
                 </>

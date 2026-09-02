@@ -24,7 +24,7 @@ export function Hero() {
             Caixa Coletora de Entulho em Manaus
           </h1>
           <p className="mt-5 max-w-lg text-[15px] leading-7 text-zinc-400 sm:text-base">
-            Locação e alocação de caixa coletora de{" "}
+            Locação de caixa coletora de{" "}
             <span className="font-medium text-white">6 m³</span> para obras,
             reformas e limpezas em Manaus – AM, com permanência de até 3 dias
             úteis.

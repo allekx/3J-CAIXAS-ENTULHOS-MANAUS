@@ -20,7 +20,7 @@ export function ConversionCTA() {
         </h2>
         <p className="mx-auto mt-4 max-w-xl text-[15px] leading-7 text-zinc-400 sm:text-base">
           Faça sua solicitação online de caixa coletora de entulho e nossa equipe
-          entrará em contato para confirmar os detalhes da alocação.
+          entrará em contato para confirmar os detalhes da locação.
         </p>
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">

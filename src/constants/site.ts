@@ -2,7 +2,7 @@ export const SITE = {
   name: "3J Caixas Entulhos",
   shortName: "3J",
   description:
-    "Sistema de solicitação de alocação de caixas coletoras de entulho.",
+    "Sistema de solicitação de locação de caixas coletoras de entulho.",
 } as const;
 
 export const ROUTES = {

@@ -21,7 +21,7 @@ export function Location() {
             <strong className="font-medium text-landing-black">
               {HOME_COMPANY.address.neighborhood}, Manaus – AM
             </strong>
-            , e realiza atendimento relacionado à alocação de caixas coletoras de
+            , e realiza atendimento relacionado à locação de caixas coletoras de
             entulho em Manaus e região.
           </p>
 

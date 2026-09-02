@@ -1,5 +1,5 @@
-import { isValidBrazilianPhone } from "@/lib/utils/phone";
-import { isValidCpfCnpj } from "@/lib/utils/document";
+import { isValidBrazilianPhone, onlyDigits } from "@/lib/utils/phone";
+import { isValidCnpj } from "@/lib/utils/document";
 import type {
   CustomerFormData,
   CustomerFormErrors,
@@ -18,8 +18,8 @@ export function getCustomerFormErrors(
     errors.phone = "Informe um telefone válido com DDD.";
   }
 
-  if (!isValidCpfCnpj(data.document)) {
-    errors.document = "Informe um CPF ou CNPJ válido.";
+  if (onlyDigits(data.document).length > 0 && !isValidCnpj(data.document)) {
+    errors.document = "Informe um CNPJ válido.";
   }
 
   if (!data.address.trim()) {

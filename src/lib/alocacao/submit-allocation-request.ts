@@ -1,3 +1,4 @@
+import { parseOptionalCnpj } from "@/lib/utils/document";
 import type { CustomerFormData } from "@/types/alocacao";
 import type {
   CreateAllocationRequestSuccess,
@@ -17,7 +18,7 @@ export function toPublicAllocationPayload(
   return {
     customer_name: data.responsibleName,
     customer_phone: data.phone,
-    customer_document: data.document,
+    customer_document: parseOptionalCnpj(data.document),
     street: data.address,
     address_number: data.number,
     complement: data.complement,

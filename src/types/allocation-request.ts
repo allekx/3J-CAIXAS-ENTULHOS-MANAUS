@@ -66,7 +66,7 @@ export type AllocationRequestInsert = {
   status?: AllocationRequestStatus;
   customer_name: string;
   customer_phone: string;
-  customer_document: string;
+  customer_document: string | null;
   street: string;
   address_number: string;
   complement?: string | null;
@@ -96,7 +96,7 @@ export type AllocationRequestUpdate = Partial<AllocationRequestInsert>;
 export type PublicAllocationRequestPayload = {
   customer_name: string;
   customer_phone: string;
-  customer_document: string;
+  customer_document: string | null;
   street: string;
   address_number: string;
   complement: string;

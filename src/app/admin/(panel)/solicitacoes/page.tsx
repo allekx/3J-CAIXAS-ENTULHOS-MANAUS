@@ -29,7 +29,7 @@ export default async function AdminSolicitacoesPage({ searchParams }: PageProps)
         Solicitações
       </h1>
       <p className="mt-1 text-sm text-brand-muted">
-        Central de atendimento das solicitações de alocação.
+        Central de atendimento das solicitações de locação.
       </p>
 
       <div className="mt-6">

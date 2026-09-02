@@ -9,7 +9,8 @@ import {
   type PublicBoxDetails,
 } from "@/lib/alocacao/public-request-view";
 import { formatFullAddress } from "@/lib/utils/alocacao";
-import { formatCpfCnpj } from "@/lib/utils/document";
+import { formatCnpj } from "@/lib/utils/document";
+import { onlyDigits } from "@/lib/utils/phone";
 import { cn } from "@/lib/utils/cn";
 import type { CustomerFormData } from "@/types/alocacao";
 
@@ -63,14 +64,14 @@ export function ReviewStep({
         Revise os dados da sua solicitação
       </h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-brand-muted sm:text-base">
-        Confira se as informações estão corretas antes de confirmar a alocação
+        Confira se as informações estão corretas antes de confirmar a locação
         da sua caixa coletora.
       </p>
 
       <article className="mt-6 border border-brand-border bg-white p-4 sm:p-6">
         <div className="flex items-start justify-between gap-3">
           <h2 className="text-xs font-semibold tracking-[0.14em] text-brand-gold-dark uppercase">
-            Local da alocação
+            Local da locação
           </h2>
           <button
             type="button"
@@ -87,7 +88,9 @@ export function ReviewStep({
             value={data.responsibleName}
           />
           <ReviewRow label="Telefone / WhatsApp" value={data.phone} />
-          <ReviewRow label="CPF/CNPJ" value={formatCpfCnpj(data.document)} />
+          {onlyDigits(data.document).length > 0 ? (
+            <ReviewRow label="CNPJ" value={formatCnpj(data.document)} />
+          ) : null}
           <ReviewRow label="Endereço completo" value={formatFullAddress(data)} />
           <ReviewRow label="Bairro" value={data.neighborhood} />
           <ReviewRow
@@ -140,7 +143,7 @@ export function ReviewStep({
             ) : null}
             {boxDetails.rentalDays ? (
               <ReviewRow
-                label="Período de alocação"
+                label="Período de locação"
                 value={
                   boxDetails.rentalDays === 1
                     ? "1 dia"
@@ -176,7 +179,7 @@ export function ReviewStep({
       <aside className="mt-4 border border-brand-gold bg-white p-4 sm:p-5">
         <h2 className="text-sm font-semibold text-brand-black">Tudo certo?</h2>
         <p className="mt-1 text-sm leading-relaxed text-brand-muted">
-          Ao confirmar, você estará solicitando a alocação da caixa coletora
+          Ao confirmar, você estará solicitando a locação da caixa coletora
           conforme os dados apresentados acima.
         </p>
       </aside>
@@ -231,7 +234,7 @@ export function ReviewStep({
           disabled={isSubmitting}
           aria-busy={isSubmitting}
         >
-          {isSubmitting ? "Enviando..." : "Confirmar alocação"}
+          {isSubmitting ? "Enviando..." : "Confirmar locação"}
         </Button>
         <Button
           type="button"

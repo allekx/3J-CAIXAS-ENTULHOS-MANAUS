@@ -20,7 +20,7 @@ export function Footer() {
               {HOME_COMPANY.commercialName}
             </p>
             <p className="mt-3 max-w-xs text-sm leading-7 text-zinc-400">
-              Alocação de caixas coletoras para obras, reformas e limpezas em
+              Locação de caixas coletoras para obras, reformas e limpezas em
               Manaus.
             </p>
           </div>

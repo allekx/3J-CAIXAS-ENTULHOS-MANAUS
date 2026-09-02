@@ -154,7 +154,7 @@ export function AllocationHeader() {
 
       <div className="px-4 pt-4 pb-5 text-center sm:pb-6">
         <h1 className="text-xl font-bold tracking-tight text-brand-black sm:text-2xl">
-          Confirmação de Alocação
+          Confirmação de Locação
         </h1>
       </div>
     </header>

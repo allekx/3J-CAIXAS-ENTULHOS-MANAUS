@@ -15,7 +15,7 @@ export function SuccessStep({ protocol, submittedAt }: SuccessStepProps) {
         Solicitação recebida com sucesso!
       </h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-brand-muted sm:text-base">
-        Sua solicitação de alocação da caixa coletora foi recebida e está em
+        Sua solicitação de locação da caixa coletora foi recebida e está em
         análise.
       </p>
 

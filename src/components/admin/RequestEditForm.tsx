@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Field, TextArea, TextInput } from "@/components/ui/Field";
 import { updateAllocationRequestAction } from "@/app/admin/(panel)/solicitacoes/actions";
 import { ALLOCATION_STATUS_LABELS } from "@/constants/allocation-status";
+import { ADMIN_PROPOSAL_PDF_ENABLED } from "@/constants/admin";
 import { COLLECTOR_BOX_DEFAULTS } from "@/constants/alocacao";
 import { adminSolicitacaoPropostaPath } from "@/constants/site";
 import { PAYMENT_METHODS } from "@/types/alocacao";
@@ -29,7 +30,7 @@ import {
 } from "@/lib/money";
 import { proposalPdfFilename } from "@/lib/proposal/filename";
 import { formatRequestDate } from "@/lib/utils/alocacao";
-import { formatCpfCnpj, maskCpfCnpj } from "@/lib/utils/document";
+import { formatCnpj, maskCnpj } from "@/lib/utils/document";
 import { maskBrazilianPhone } from "@/lib/utils/phone";
 import type { UpdateAllocationRequestPayload } from "@/lib/alocacao/update-allocation-request.schema";
 
@@ -66,7 +67,7 @@ function toFormState(request: AllocationRequestRow): FormState {
     status: request.status,
     customer_name: request.customer_name,
     customer_phone: maskBrazilianPhone(request.customer_phone),
-    customer_document: formatCpfCnpj(request.customer_document ?? ""),
+    customer_document: formatCnpj(request.customer_document ?? ""),
     street: request.street,
     address_number: request.address_number,
     complement: request.complement ?? "",
@@ -256,15 +257,22 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
     }
   }
 
-  const parsedService = parseMoneyInput(form.service_value);
-  const parsedAdditional = parseMoneyInput(form.additional_value);
-  const parsedDiscount = parseMoneyInput(form.discount_value);
-  const liveTotal =
-    Number.isFinite(parsedService) &&
-    Number.isFinite(parsedAdditional) &&
-    Number.isFinite(parsedDiscount)
+  const parsedService = ADMIN_PROPOSAL_PDF_ENABLED
+    ? parseMoneyInput(form.service_value)
+    : 0;
+  const parsedAdditional = ADMIN_PROPOSAL_PDF_ENABLED
+    ? parseMoneyInput(form.additional_value)
+    : 0;
+  const parsedDiscount = ADMIN_PROPOSAL_PDF_ENABLED
+    ? parseMoneyInput(form.discount_value)
+    : 0;
+  const liveTotal = ADMIN_PROPOSAL_PDF_ENABLED
+    ? Number.isFinite(parsedService) &&
+      Number.isFinite(parsedAdditional) &&
+      Number.isFinite(parsedDiscount)
       ? calculateProposalTotal(parsedService, parsedAdditional, parsedDiscount)
-      : null;
+      : null
+    : null;
 
   const forwardMessage = buildForwardRequestMessage({
     protocol: request.protocol,
@@ -341,8 +349,7 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
 
           <Field
             id="customer_document"
-            label="CPF/CNPJ"
-            required
+            label="CNPJ (opcional)"
             error={fieldErrors.customer_document}
           >
             <TextInput
@@ -352,7 +359,7 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
               value={form.customer_document}
               error={fieldErrors.customer_document}
               onChange={(value) =>
-                patchForm({ customer_document: maskCpfCnpj(value) })
+                patchForm({ customer_document: maskCnpj(value) })
               }
             />
           </Field>
@@ -592,86 +599,88 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
         </p>
       </section>
 
-      <section className="border border-brand-border bg-white p-4 sm:p-6">
-        <h2 className="text-xs font-semibold tracking-[0.14em] text-brand-gold-dark uppercase">
-          Valores da proposta
-        </h2>
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Field
-            id="service_value"
-            label="Valor do serviço"
-            error={fieldErrors.service_value}
-          >
-            <TextInput
-              id="service_value"
-              name="service_value"
-              inputMode="decimal"
-              value={form.service_value}
-              error={fieldErrors.service_value}
-              onChange={(value) => patchForm({ service_value: value })}
-              onBlur={() => blurMoney("service_value")}
-            />
-          </Field>
-          <Field
-            id="additional_value"
-            label="Valor adicional"
-            error={fieldErrors.additional_value}
-          >
-            <TextInput
-              id="additional_value"
-              name="additional_value"
-              inputMode="decimal"
-              value={form.additional_value}
-              error={fieldErrors.additional_value}
-              onChange={(value) => patchForm({ additional_value: value })}
-              onBlur={() => blurMoney("additional_value")}
-            />
-          </Field>
-          <Field
-            id="discount_value"
-            label="Desconto"
-            error={fieldErrors.discount_value}
-          >
-            <TextInput
-              id="discount_value"
-              name="discount_value"
-              inputMode="decimal"
-              value={form.discount_value}
-              error={fieldErrors.discount_value}
-              onChange={(value) => patchForm({ discount_value: value })}
-              onBlur={() => blurMoney("discount_value")}
-            />
-          </Field>
-          <div className="flex min-w-0 flex-col gap-1.5">
-            <p className="text-sm font-medium text-brand-black">Total</p>
-            <p className="flex h-11 min-h-11 items-center border border-brand-border bg-brand-surface px-3 text-base font-semibold text-brand-black">
-              {liveTotal === null ? "—" : formatMoneyBrl(liveTotal)}
-            </p>
-          </div>
-          <div className="sm:col-span-2">
+      {ADMIN_PROPOSAL_PDF_ENABLED ? (
+        <section className="border border-brand-border bg-white p-4 sm:p-6">
+          <h2 className="text-xs font-semibold tracking-[0.14em] text-brand-gold-dark uppercase">
+            Valores da proposta
+          </h2>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <Field
-              id="proposal_notes"
-              label="Observações da proposta"
-              error={fieldErrors.proposal_notes}
+              id="service_value"
+              label="Valor do serviço"
+              error={fieldErrors.service_value}
             >
-              <TextArea
-                id="proposal_notes"
-                name="proposal_notes"
-                value={form.proposal_notes}
-                error={fieldErrors.proposal_notes}
-                onChange={(value) => patchForm({ proposal_notes: value })}
+              <TextInput
+                id="service_value"
+                name="service_value"
+                inputMode="decimal"
+                value={form.service_value}
+                error={fieldErrors.service_value}
+                onChange={(value) => patchForm({ service_value: value })}
+                onBlur={() => blurMoney("service_value")}
               />
             </Field>
-            <p className="mt-2 text-xs text-brand-muted">
-              Estas observações aparecem no PDF enviado ao cliente.
-            </p>
+            <Field
+              id="additional_value"
+              label="Valor adicional"
+              error={fieldErrors.additional_value}
+            >
+              <TextInput
+                id="additional_value"
+                name="additional_value"
+                inputMode="decimal"
+                value={form.additional_value}
+                error={fieldErrors.additional_value}
+                onChange={(value) => patchForm({ additional_value: value })}
+                onBlur={() => blurMoney("additional_value")}
+              />
+            </Field>
+            <Field
+              id="discount_value"
+              label="Desconto"
+              error={fieldErrors.discount_value}
+            >
+              <TextInput
+                id="discount_value"
+                name="discount_value"
+                inputMode="decimal"
+                value={form.discount_value}
+                error={fieldErrors.discount_value}
+                onChange={(value) => patchForm({ discount_value: value })}
+                onBlur={() => blurMoney("discount_value")}
+              />
+            </Field>
+            <div className="flex min-w-0 flex-col gap-1.5">
+              <p className="text-sm font-medium text-brand-black">Total</p>
+              <p className="flex h-11 min-h-11 items-center border border-brand-border bg-brand-surface px-3 text-base font-semibold text-brand-black">
+                {liveTotal === null ? "—" : formatMoneyBrl(liveTotal)}
+              </p>
+            </div>
+            <div className="sm:col-span-2">
+              <Field
+                id="proposal_notes"
+                label="Observações da proposta"
+                error={fieldErrors.proposal_notes}
+              >
+                <TextArea
+                  id="proposal_notes"
+                  name="proposal_notes"
+                  value={form.proposal_notes}
+                  error={fieldErrors.proposal_notes}
+                  onChange={(value) => patchForm({ proposal_notes: value })}
+                />
+              </Field>
+              <p className="mt-2 text-xs text-brand-muted">
+                Estas observações aparecem no PDF enviado ao cliente.
+              </p>
+            </div>
           </div>
-        </div>
-        <p className="mt-3 text-xs text-brand-muted">
-          O total é calculado automaticamente: serviço + adicional − desconto.
-          O valor definitivo é validado no servidor.
-        </p>
-      </section>
+          <p className="mt-3 text-xs text-brand-muted">
+            O total é calculado automaticamente: serviço + adicional − desconto.
+            O valor definitivo é validado no servidor.
+          </p>
+        </section>
+      ) : null}
 
       <section className="border border-brand-border bg-white p-4 sm:p-6">
         <h2 className="text-xs font-semibold tracking-[0.14em] text-brand-gold-dark uppercase">
@@ -705,7 +714,7 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
             />
           </Field>
           <p className="text-xs text-brand-muted">
-            Uso interno. Não aparece na proposta em PDF.
+            Uso interno. Não aparece nas mensagens enviadas ao cliente.
           </p>
         </div>
       </section>
@@ -726,24 +735,28 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
         <Button type="submit" disabled={isSaving} aria-busy={isSaving}>
           {isSaving ? "Salvando..." : "Salvar alterações"}
         </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          disabled={isGeneratingPdf || isSaving}
-          aria-busy={isGeneratingPdf}
-          onClick={() => void generatePdf()}
-        >
-          {isGeneratingPdf ? "Gerando PDF..." : "Gerar proposta PDF"}
-        </Button>
-        {hasGeneratedPdf ? (
-          <Button
-            type="button"
-            variant="ghost"
-            disabled={isGeneratingPdf || isSaving}
-            onClick={() => void generatePdf()}
-          >
-            Baixar PDF
-          </Button>
+        {ADMIN_PROPOSAL_PDF_ENABLED ? (
+          <>
+            <Button
+              type="button"
+              variant="secondary"
+              disabled={isGeneratingPdf || isSaving}
+              aria-busy={isGeneratingPdf}
+              onClick={() => void generatePdf()}
+            >
+              {isGeneratingPdf ? "Gerando PDF..." : "Gerar proposta PDF"}
+            </Button>
+            {hasGeneratedPdf ? (
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={isGeneratingPdf || isSaving}
+                onClick={() => void generatePdf()}
+              >
+                Baixar PDF
+              </Button>
+            ) : null}
+          </>
         ) : null}
         <Button
           type="button"

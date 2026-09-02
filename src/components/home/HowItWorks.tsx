@@ -8,7 +8,7 @@ export function HowItWorks() {
     <HomeSection id="como-funciona" tone="subtle">
       <SectionHeading
         align="center"
-        title="Como funciona a alocação da caixa coletora"
+        title="Como funciona a locação da caixa coletora"
         description="Processo simples para solicitar locação de caixa de entulho em Manaus."
       />
 

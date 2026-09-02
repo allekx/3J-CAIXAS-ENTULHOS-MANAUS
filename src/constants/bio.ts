@@ -1,13 +1,19 @@
 import { HOME_COMPANY } from "@/constants/home";
 import { ROUTES } from "@/constants/site";
 
-/** Link oficial para avaliações no Google — 3J Caixas Entulhos Manaus */
-export const GOOGLE_REVIEW_DEFAULT_URL =
-  "https://maps.app.goo.gl/WfqZiGg69X2qgNma6";
+/** Site institucional da 3J — SimDif */
+export const BIO_WEBSITE_DEFAULT_URL = "https://3jcaixasentulhomanaus.simdif.com/";
 
-export const GOOGLE_REVIEW_URL =
-  process.env.NEXT_PUBLIC_GOOGLE_REVIEW_URL?.trim() ||
-  GOOGLE_REVIEW_DEFAULT_URL;
+export const BIO_WEBSITE_URL =
+  process.env.NEXT_PUBLIC_BIO_WEBSITE_URL?.trim() || BIO_WEBSITE_DEFAULT_URL;
+
+/** Instagram oficial da 3J */
+export const BIO_INSTAGRAM_DEFAULT_URL =
+  "https://www.instagram.com/3_j_caixas_entulhos_manaus";
+
+export const BIO_INSTAGRAM_URL =
+  process.env.NEXT_PUBLIC_BIO_INSTAGRAM_URL?.trim() ||
+  BIO_INSTAGRAM_DEFAULT_URL;
 
 /** Canal oficial no YouTube — 3J Caixas Entulhos Manaus */
 export const YOUTUBE_DEFAULT_URL =
@@ -28,16 +34,15 @@ export const GOOGLE_MAPS_EMBED_URL =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.1105522692654!2d-60.0686356875!3d-3.0225982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x926c17bd023fd083%3A0xff913899cbffe1f2!2s3J%20CAIXAS%20ENTULHOS%20MANAUS!5e0!3m2!1spt-BR!2sbr!4v1735689600000!5m2!1spt-BR!2sbr";
 
 export const BIO_WHATSAPP_URL =
-  "https://wa.me/5592985946242?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20uma%20caixa%20coletora%20de%206%20m%C2%B3%20em%20Manaus.";
+  "https://wa.me/5592985946242?text=Ol%C3%A1%2C%20gostaria%20de%20solicitar%20um%20or%C3%A7amento%20de%20uma%20caixa%20coletora";
 
 export const BIO_LINKS = {
   allocation: ROUTES.confirmacaoAlocacao,
   whatsapp: BIO_WHATSAPP_URL,
-  googleReview: GOOGLE_REVIEW_URL,
-  youtube: YOUTUBE_URL,
-  website: ROUTES.home,
   googleMaps: GOOGLE_MAPS_PLACE_URL,
-  instagram: HOME_COMPANY.instagramUrl,
+  website: BIO_WEBSITE_URL,
+  instagram: BIO_INSTAGRAM_URL,
+  youtube: YOUTUBE_URL,
 } as const;
 
 export const BIO_PROFILE = {
@@ -69,7 +74,7 @@ export const BIO_FOOTER = {
   tagline: "Caixas coletoras de entulho em Manaus – AM",
   phone: HOME_COMPANY.phoneDisplay,
   email: HOME_COMPANY.email,
-  instagram: HOME_COMPANY.instagram,
-  instagramUrl: HOME_COMPANY.instagramUrl,
+  instagram: "@3_j_caixas_entulhos_manaus",
+  instagramUrl: BIO_INSTAGRAM_URL,
   copyright: "© 2026 3J Caixas Entulhos Manaus",
 } as const;

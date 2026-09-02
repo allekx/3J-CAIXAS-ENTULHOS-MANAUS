@@ -8,7 +8,7 @@ import { WHATSAPP_LOCATION_INFO } from "@/constants/alocacao";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import type { CustomerFormData } from "@/types/alocacao";
 import { getCustomerFormErrors } from "@/lib/utils/alocacao";
-import { maskCpfCnpj } from "@/lib/utils/document";
+import { maskCnpj } from "@/lib/utils/document";
 import { maskBrazilianPhone } from "@/lib/utils/phone";
 import { cn } from "@/lib/utils/cn";
 
@@ -41,10 +41,10 @@ export function CustomerDataStep({
   return (
     <section className="mt-8">
       <h1 className="text-2xl font-semibold tracking-tight text-brand-black sm:text-[1.75rem]">
-        Confirmação de Alocação
+        Confirmação de Locação
       </h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-brand-muted sm:text-base">
-        Preencha os dados abaixo para confirmarmos a alocação da sua caixa
+        Preencha os dados abaixo para confirmarmos a locação da sua caixa
         coletora.
       </p>
 
@@ -97,8 +97,7 @@ export function CustomerDataStep({
           <div className="sm:col-span-6">
             <Field
               id="document"
-              label="CPF/CNPJ"
-              required
+              label="CNPJ (opcional)"
               error={errors.document}
             >
               <TextInput
@@ -109,7 +108,7 @@ export function CustomerDataStep({
                 autoComplete="off"
                 error={errors.document}
                 onChange={(value) =>
-                  onChange({ document: maskCpfCnpj(value) })
+                  onChange({ document: maskCnpj(value) })
                 }
               />
             </Field>

@@ -1,10 +1,4 @@
--- CNPJ opcional do cliente na solicitação de locação
-alter table public.allocation_requests
-  add column if not exists customer_document text;
-
-comment on column public.allocation_requests.customer_document is
-  'CNPJ do cliente (opcional, somente dígitos, 14 caracteres).';
-
+-- CNPJ opcional: somente 14 dígitos ou null
 alter table public.allocation_requests
   drop constraint if exists allocation_requests_customer_document_check;
 
@@ -17,3 +11,6 @@ alter table public.allocation_requests
       and customer_document ~ '^[0-9]+$'
     )
   );
+
+comment on column public.allocation_requests.customer_document is
+  'CNPJ do cliente (opcional, somente dígitos, 14 caracteres).';

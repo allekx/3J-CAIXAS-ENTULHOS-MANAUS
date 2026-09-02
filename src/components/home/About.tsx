@@ -27,7 +27,7 @@ export function About() {
     <HomeSection id="sobre">
       <SectionHeading
         title="Sobre a 3J Caixas Entulhos Manaus"
-        description="Empresa localizada no bairro Tarumã, em Manaus – AM, com foco em alocação de caixa coletora de entulho para obras, reformas e limpezas."
+        description="Empresa localizada no bairro Tarumã, em Manaus – AM, com foco em locação de caixa coletora de entulho para obras, reformas e limpezas."
       />
 
       <div className="mt-10 max-w-3xl rounded-xl bg-landing-subtle p-5 sm:p-7">

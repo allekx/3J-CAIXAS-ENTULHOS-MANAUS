@@ -42,8 +42,8 @@ export default async function AdminSolicitacaoDetailPage({ params }: PageProps) 
         Atendimento da solicitação
       </h1>
       <p className="mt-1 text-sm text-brand-muted">
-        Visualize e atualize os dados desta alocação. Depois de salvar, gere a
-        proposta comercial em PDF ou encaminhe o atendimento pelo WhatsApp.
+        Visualize e atualize os dados desta locação. Depois de salvar, encaminhe
+        o atendimento pelo WhatsApp.
       </p>
 
       <RequestEditForm request={request} />

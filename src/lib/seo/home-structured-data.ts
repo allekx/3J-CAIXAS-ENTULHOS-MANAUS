@@ -57,9 +57,9 @@ export function buildHomeStructuredData() {
     "@type": "Service",
     "@id": `${siteUrl}/#service`,
     name: "Locação de caixa coletora de entulho",
-    serviceType: "Alocação de caixa coletora de entulho",
+    serviceType: "Locação de caixa coletora de entulho",
     description:
-      "Serviço de alocação e locação de caixa coletora de 6 m³ para obras, reformas e limpezas em Manaus – AM.",
+      "Serviço de locação de caixa coletora de 6 m³ para obras, reformas e limpezas em Manaus – AM.",
     provider: { "@id": businessId },
     areaServed: {
       "@type": "City",

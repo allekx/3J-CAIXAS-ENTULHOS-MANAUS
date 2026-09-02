@@ -257,7 +257,7 @@ export function ProposalPdfDocument({ data }: { data: ProposalPdfData }) {
     <Document
       title={`Proposta ${data.protocol}`}
       author={data.companyName}
-      subject="Proposta de alocação de caixa coletora"
+      subject="Proposta de locação de caixa coletora"
       language="pt-BR"
     >
       <Page size="A4" style={styles.page} wrap>
@@ -282,7 +282,7 @@ export function ProposalPdfDocument({ data }: { data: ProposalPdfData }) {
         <View style={styles.divider} />
 
         <Text style={styles.title}>
-          PROPOSTA DE ALOCAÇÃO DE CAIXA COLETORA
+          PROPOSTA DE LOCAÇÃO DE CAIXA COLETORA
         </Text>
 
         <View style={styles.metaRow}>
@@ -301,9 +301,11 @@ export function ProposalPdfDocument({ data }: { data: ProposalPdfData }) {
             <DataField label="Nome" value={data.customer.name} wide />
             <DataField label="Telefone" value={data.customer.phone} />
           </View>
-          <View style={styles.row}>
-            <DataField label="CPF/CNPJ" value={data.customer.document} />
-          </View>
+          {data.customer.document !== "—" ? (
+            <View style={styles.row}>
+              <DataField label="CNPJ" value={data.customer.document} />
+            </View>
+          ) : null}
           <View style={styles.row}>
             <DataField label="Endereço" value={data.customer.address} wide />
           </View>

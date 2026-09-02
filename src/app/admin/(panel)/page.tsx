@@ -3,6 +3,7 @@ import Link from "next/link";
 import { RequestsTable } from "@/components/admin/RequestsTable";
 import { TodayOperations } from "@/components/admin/TodayOperations";
 import { ROUTES } from "@/constants/site";
+import { ADMIN_PROPOSAL_PDF_ENABLED } from "@/constants/admin";
 import { getAdminDashboard } from "@/services/admin-allocation-requests";
 
 export const metadata: Metadata = {
@@ -48,7 +49,9 @@ export default async function AdminDashboardPage() {
         <StatCard label="Solicitações hoje" value={stats.createdToday} />
         <StatCard label="Pendentes" value={stats.pending} />
         <StatCard label="Em análise" value={stats.reviewing} />
-        <StatCard label="Propostas enviadas" value={stats.proposalSent} />
+        {ADMIN_PROPOSAL_PDF_ENABLED ? (
+          <StatCard label="Propostas enviadas" value={stats.proposalSent} />
+        ) : null}
         <StatCard label="Aprovadas" value={stats.approved} />
         <StatCard
           label="Entregas previstas para hoje"

@@ -1,8 +1,8 @@
 # 3J Caixas Entulhos Manaus
 
-Sistema web da **3J Caixas Entulhos Manaus** para locação e alocação de caixas coletoras de entulho (6 m³) em Manaus – AM.
+Sistema web da **3J Caixas Entulhos Manaus** para locação de caixas coletoras de entulho (6 m³) em Manaus – AM.
 
-O cliente conhece a empresa na landing page ou na bio (`/bio`), solicita a alocação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp. A equipe opera solicitações no painel administrativo: dados da caixa, valores, proposta em PDF e encaminhamento operacional.
+O cliente conhece a empresa na landing page ou na bio (`/bio`), solicita a locação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp. A equipe opera solicitações no painel administrativo: dados da caixa, valores, proposta em PDF e encaminhamento operacional.
 
 ## Stack
 
@@ -55,7 +55,7 @@ Abre em [http://localhost:3000](http://localhost:3000).
 | --- | --- |
 | `/` | Landing page (SEO on-page e local) |
 | `/bio` | Link in bio — Instagram, redes sociais |
-| `/confirmacao-alocacao` | Fluxo de solicitação de alocação (3 etapas) |
+| `/confirmacao-alocacao` | Fluxo de solicitação de locação (3 etapas) |
 | `/robots.txt` | Robots dinâmico |
 | `/sitemap.xml` | Sitemap dinâmico |
 
@@ -137,7 +137,7 @@ Após o deploy, teste:
 
 - landing (`/`);
 - bio (`/bio`);
-- fluxo público de alocação;
+- fluxo público de locação;
 - login administrativo e geração de PDF.
 
 ## Empresa (referência)
@@ -145,7 +145,7 @@ Após o deploy, teste:
 | Campo | Valor |
 | --- | --- |
 | Nome | 3J Caixas Entulhos Manaus |
-| Serviço | Locação/alocação de caixa coletora de entulho 6 m³ |
+| Serviço | Locação de caixa coletora de entulho 6 m³ |
 | Permanência padrão | 3 dias úteis |
 | Telefone | (92) 98594-6242 |
 | WhatsApp | +55 92 98594-6242 |

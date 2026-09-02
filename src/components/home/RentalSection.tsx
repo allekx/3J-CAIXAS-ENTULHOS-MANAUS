@@ -10,13 +10,13 @@ export function RentalSection() {
     <HomeSection id="locacao" tone="subtle">
       <SectionHeading
         title="Locação de caixa coletora de entulho em Manaus"
-        description="A 3J Caixas Entulhos Manaus oferece alocação de caixa coletora de entulho com capacidade de 6 m³ para obras, reformas e serviços de limpeza em Manaus – AM."
+        description="A 3J Caixas Entulhos Manaus oferece locação de caixa coletora de entulho com capacidade de 6 m³ para obras, reformas e serviços de limpeza em Manaus – AM."
       />
 
       <div className="mt-8 max-w-3xl space-y-4 text-[15px] leading-7 text-landing-muted sm:text-base">
         <p>
           Se você procura <strong className="font-medium text-landing-black">locação de caixa coletora</strong> ou{" "}
-          <strong className="font-medium text-landing-black">alocação de caixa de entulho em Manaus</strong>,
+          <strong className="font-medium text-landing-black">locação de caixa de entulho em Manaus</strong>,
           a 3J disponibiliza caixa coletora de {COLLECTOR_BOX_DEFAULTS.boxSize} para organizar
           resíduos de construção, reforma e demolição no local da obra.
         </p>
@@ -28,7 +28,7 @@ export function RentalSection() {
             href={HOME_CTA.href}
             className="font-medium text-landing-black underline-offset-4 hover:underline"
           >
-            confirmação de alocação
+            confirmação de locação
           </Link>{" "}
           ou fale conosco pelo WhatsApp.
         </p>

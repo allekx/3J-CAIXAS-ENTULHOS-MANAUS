@@ -44,7 +44,7 @@ export const WHATSAPP_LOCATION_INFO = {
 
 export function getWhatsAppConversationUrl(protocol: string) {
   const phone = onlyDigits(COMPANY.whatsapp);
-  const message = `Olá, acabei de realizar uma solicitação de alocação de caixa coletora. Meu protocolo é ${protocol}. Segue a localização da obra:`;
+  const message = `Olá, acabei de realizar uma solicitação de locação de caixa coletora. Meu protocolo é ${protocol}. Segue a localização da obra:`;
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
