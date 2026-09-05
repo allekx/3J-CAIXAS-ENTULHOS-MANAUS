@@ -65,3 +65,7 @@ body {
 .bio-reveal {
   animation: bio-fade-in-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+.admin-login-reveal {
+  animation: bio-fade-in-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

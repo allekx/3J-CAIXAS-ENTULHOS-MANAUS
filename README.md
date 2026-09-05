@@ -73,11 +73,13 @@ Abre em [http://localhost:3000](http://localhost:3000).
 
 | Rota | Descrição |
 | --- | --- |
-| `/admin/login` | Login |
+| `/admin/login` | Login com identidade visual da marca (logo, preto e dourado) |
 | `/admin` | Dashboard operacional |
 | `/admin/solicitacoes` | Lista de solicitações |
 | `/admin/solicitacoes/[id]` | Detalhe, edição e encaminhamento WhatsApp |
 | `/admin/solicitacoes/[id]/proposta` | API de PDF (existente; UI oculta por padrão) |
+
+A tela `/admin/login` usa o logo oficial (`public/logos/logo-3j-oficial.jpg`), fundo preto e acentos dourados da marca. O restante do painel mantém o layout operacional.
 
 ### Fluxo do painel (atual)
 
@@ -93,23 +95,23 @@ Valores da proposta e botões de PDF não aparecem enquanto `ADMIN_PROPOSAL_PDF_
 ```
 src/
 ├── app/                    # Rotas Next.js
-│   ├── (site)/             # Landing page
-│   ├── bio/                # Página link in bio
+│   ├── (site)/             # `/` → redirect para `/bio`; landing em `/inicio`
+│   ├── bio/                # Entrada pública atual
 │   ├── confirmacao-alocacao/
-│   ├── admin/
+│   ├── admin/              # Login + painel
 │   ├── api/allocation-requests/
 │   ├── sitemap.ts
 │   └── robots.ts
 ├── components/
-│   ├── home/               # Landing
+│   ├── home/               # Landing (preview em `/inicio`)
 │   ├── bio/                # Bio
-│   ├── alocacao/           # Fluxo de solicitação
-│   └── admin/              # Painel
+│   ├── alocacao/           # Fluxo de solicitação + header da marca
+│   └── admin/              # Painel e login (`AdminLoginView`)
 ├── constants/              # home.ts, bio.ts, alocacao.ts, admin.ts, site.ts
 └── lib/                    # SEO, Supabase, PDF, validação, documento (CNPJ)
 public/
 ├── images/3j/              # Fotos da empresa
-└── logos/                  # Logo oficial
+└── logos/                  # Logo oficial (login e locação)
 supabase/
 ├── schema.sql
 └── migrations/
@@ -175,10 +177,11 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy** (essas variáve
 
 Após o deploy, teste:
 
-- landing (`/`);
+- `/` redireciona para `/bio`;
 - bio (`/bio`);
+- preview da landing (`/inicio`), se necessário;
 - fluxo público de locação (com e sem CNPJ) e botão WhatsApp na etapa final;
-- login administrativo, dashboard, edição de solicitação e encaminhamento WhatsApp.
+- login administrativo (`/admin/login`), dashboard, edição de solicitação e encaminhamento WhatsApp.
 
 ## Empresa (referência)
 

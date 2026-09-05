@@ -111,7 +111,13 @@ function HeaderBackdrop({
   );
 }
 
-export function AllocationHeader() {
+type AllocationHeaderProps = {
+  title?: string;
+};
+
+export function AllocationHeader({
+  title = "Confirmação de Locação",
+}: AllocationHeaderProps) {
   const [logoReady, setLogoReady] = useState(false);
   const [logoMissing, setLogoMissing] = useState(false);
 
@@ -154,7 +160,7 @@ export function AllocationHeader() {
 
       <div className="px-4 pt-4 pb-5 text-center sm:pb-6">
         <h1 className="text-xl font-bold tracking-tight text-brand-black sm:text-2xl">
-          Confirmação de Locação
+          {title}
         </h1>
       </div>
     </header>
