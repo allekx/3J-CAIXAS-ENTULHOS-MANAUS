@@ -7,6 +7,10 @@ export const SITE = {
 
 export const ROUTES = {
   home: "/",
+  /** Entrada pública atual (enquanto a landing não está pronta). */
+  bio: "/bio",
+  /** Preview interno da landing principal — sem indexação. */
+  landingPreview: "/inicio",
   confirmacaoAlocacao: "/confirmacao-alocacao",
   admin: "/admin",
   adminLogin: "/admin/login",

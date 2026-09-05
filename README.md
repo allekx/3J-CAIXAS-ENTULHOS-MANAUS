@@ -2,7 +2,11 @@
 
 Sistema web da **3J Caixas Entulhos Manaus** para locação de caixas coletoras de entulho (6 m³) em Manaus – AM.
 
-O cliente conhece a empresa na landing page ou na bio (`/bio`), solicita a locação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp. A equipe opera as solicitações no painel administrativo: revisa os dados, salva alterações e **encaminha o atendimento pelo WhatsApp** para outro responsável. A geração de proposta em PDF está preparada no código, mas **desativada na interface** por enquanto (`ADMIN_PROPOSAL_PDF_ENABLED` em `src/constants/admin.ts`).
+Produção: [https://3-j-caixas-entulhos-manaus.vercel.app](https://3-j-caixas-entulhos-manaus.vercel.app)
+
+**Entrada pública atual:** a URL `/` redireciona para `/bio` enquanto a landing principal não está pronta. O código da landing permanece em `/inicio` (preview interno, sem indexação).
+
+O cliente conhece a empresa na bio (`/bio`), solicita a locação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp do responsável. A equipe opera as solicitações no painel administrativo: revisa os dados, salva alterações e **encaminha o atendimento pelo WhatsApp** para outro responsável. A geração de proposta em PDF está preparada no código, mas **desativada na interface** por enquanto (`ADMIN_PROPOSAL_PDF_ENABLED` em `src/constants/admin.ts`).
 
 ## Stack
 
@@ -32,7 +36,7 @@ Requisito: Node.js ≥ 20.9.0.
 | `NEXT_PUBLIC_SUPABASE_URL` | Browser e servidor | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser e servidor | Chave anon (RLS bloqueia tabelas) |
 | `SUPABASE_SERVICE_ROLE_KEY` | **Somente servidor** | Inserts e painel via API/server actions |
-| `NEXT_PUBLIC_COMPANY_WHATSAPP` | Browser | WhatsApp da empresa (DDI + número, só dígitos) |
+| `NEXT_PUBLIC_COMPANY_WHATSAPP` | Browser | WhatsApp da empresa (DDI + número, só dígitos). Padrão: `5592985946242` |
 | `NEXT_PUBLIC_SITE_URL` | Browser | URL pública do site (canonical, sitemap, Open Graph) |
 | `NEXT_PUBLIC_BIO_WEBSITE_URL` | Browser | Site institucional na `/bio` (opcional) |
 | `NEXT_PUBLIC_BIO_INSTAGRAM_URL` | Browser | Instagram na `/bio` (opcional) |
@@ -41,6 +45,8 @@ Requisito: Node.js ≥ 20.9.0.
 | `NEXT_PUBLIC_COMPANY_EMAIL` | Browser | E-mail no PDF da proposta (opcional; futuro) |
 
 Padrões da `/bio` e links fixos (Google Maps, WhatsApp) estão em `src/constants/bio.ts`.
+
+O número de WhatsApp oficial da empresa é **+55 92 98594-6242** (`5592985946242`). Ele é usado na landing, na bio e no botão **Falar pelo WhatsApp** da etapa final de `/confirmacao-alocacao`. Se `NEXT_PUBLIC_COMPANY_WHATSAPP` estiver vazia, o código usa esse número como fallback.
 
 Nunca prefixe `SUPABASE_SERVICE_ROLE_KEY` com `NEXT_PUBLIC_`.
 
@@ -56,11 +62,12 @@ Abre em [http://localhost:3000](http://localhost:3000).
 
 | Rota | Descrição |
 | --- | --- |
-| `/` | Landing page (SEO on-page e local) |
-| `/bio` | Link in bio — redes sociais e CTAs |
-| `/confirmacao-alocacao` | Fluxo de solicitação de locação (3 etapas, CNPJ opcional) |
+| `/` | Redireciona para `/bio` (temporário) |
+| `/bio` | Entrada pública atual — link in bio, redes e CTAs |
+| `/inicio` | Preview interno da landing principal (sem indexação) |
+| `/confirmacao-alocacao` | Fluxo de solicitação de locação (3 etapas, CNPJ opcional) + WhatsApp na etapa final |
 | `/robots.txt` | Robots dinâmico |
-| `/sitemap.xml` | Sitemap dinâmico |
+| `/sitemap.xml` | Sitemap dinâmico (prioriza `/bio`) |
 
 ### Rotas administrativas
 
@@ -110,11 +117,11 @@ supabase/
 
 ## SEO
 
-A landing principal inclui metadados, JSON-LD (Organization, LocalBusiness, Service, FAQPage), sitemap e canonical configurados via `NEXT_PUBLIC_SITE_URL`.
+Enquanto a landing não estiver pública, a entrada indexável é `/bio`. O sitemap prioriza essa rota.
 
-A página `/bio` é voltada a tráfego de redes sociais e não compete com a landing pelo mesmo objetivo de SEO.
+A landing em `/inicio` está com `noindex` e serve só para desenvolvimento/preview.
 
-Após o deploy, configure o domínio em `NEXT_PUBLIC_SITE_URL` e submeta o sitemap no Google Search Console.
+Quando a landing for publicada em `/`, restaurar o conteúdo da home, remover o redirect e voltar a incluir `/` no sitemap com prioridade alta.
 
 ## Build e produção
 
@@ -147,15 +154,31 @@ Se o painel exibir erro ao abrir uma solicitação com mensagem sobre coluna ine
 
 1. Publique o repositório no GitHub.
 2. Importe o projeto na Vercel (framework: Next.js).
-3. Cadastre todas as variáveis de ambiente em Production, Preview e Development — em especial `NEXT_PUBLIC_SITE_URL` e `SUPABASE_SERVICE_ROLE_KEY`.
+3. Cadastre as variáveis de ambiente em Production e Preview.
 4. Faça o deploy. Não é necessário `vercel.json`.
+
+### Variáveis na Vercel (importante)
+
+Cadastre as variáveis como tipo **Config** (não **Sensitive/Secret**). No tipo Secret, o Next.js na Vercel pode não injetar o valor em `process.env`, o que quebra:
+
+- `/admin` e `/admin/login` — se faltarem `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- dashboard e solicitações — se faltar `SUPABASE_SERVICE_ROLE_KEY`
+
+Valores atuais esperados em produção:
+
+| Variável | Valor |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | `https://3-j-caixas-entulhos-manaus.vercel.app` |
+| `NEXT_PUBLIC_COMPANY_WHATSAPP` | `5592985946242` |
+
+Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy** (essas variáveis entram no build).
 
 Após o deploy, teste:
 
 - landing (`/`);
 - bio (`/bio`);
-- fluxo público de locação (com e sem CNPJ);
-- login administrativo, edição de solicitação e encaminhamento WhatsApp.
+- fluxo público de locação (com e sem CNPJ) e botão WhatsApp na etapa final;
+- login administrativo, dashboard, edição de solicitação e encaminhamento WhatsApp.
 
 ## Empresa (referência)
 
@@ -165,7 +188,8 @@ Após o deploy, teste:
 | Serviço | Locação de caixa coletora de entulho 6 m³ |
 | Permanência padrão | 3 dias úteis |
 | Telefone | (92) 98594-6242 |
-| WhatsApp | +55 92 98594-6242 |
+| WhatsApp | +55 92 98594-6242 (`5592985946242`) |
 | E-mail | jadaildodasilvagomes@gmail.com |
 | Instagram | @3_j_caixas_entulhos_manaus |
 | Localização | Estrada do Tarumã – Tarumã, Manaus – AM |
+| Produção | https://3-j-caixas-entulhos-manaus.vercel.app |

@@ -1,5 +1,4 @@
 import type { CustomerFormData } from "@/types/alocacao";
-import { COMPANY } from "@/constants/company";
 import { onlyDigits } from "@/lib/utils/phone";
 
 export const INITIAL_CUSTOMER_FORM: CustomerFormData = {
@@ -42,8 +41,21 @@ export const WHATSAPP_LOCATION_INFO = {
     "Toque no botão abaixo, fale conosco pelo WhatsApp e envie a localização da obra para confirmarmos o ponto de entrega da caixa.",
 } as const;
 
+/** Número oficial — mesmo fallback de `getHomeWhatsAppNumber` em home.ts */
+const DEFAULT_COMPANY_WHATSAPP = "5592985946242";
+
+function getAllocationWhatsAppNumber() {
+  const fromEnv = onlyDigits(process.env.NEXT_PUBLIC_COMPANY_WHATSAPP ?? "");
+
+  if (fromEnv.length >= 10) {
+    return fromEnv.startsWith("55") ? fromEnv : `55${fromEnv}`;
+  }
+
+  return DEFAULT_COMPANY_WHATSAPP;
+}
+
 export function getWhatsAppConversationUrl(protocol: string) {
-  const phone = onlyDigits(COMPANY.whatsapp);
+  const phone = getAllocationWhatsAppNumber();
   const message = `Olá, acabei de realizar uma solicitação de locação de caixa coletora. Meu protocolo é ${protocol}. Segue a localização da obra:`;
 
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
