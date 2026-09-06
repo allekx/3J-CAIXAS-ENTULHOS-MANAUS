@@ -62,6 +62,12 @@ export const HOME_IMAGES = {
     height: 844,
     alt: "Caixa coletora azul da 3J com caminhão de entrega em Manaus",
   },
+  obraAmarela: {
+    src: "/images/3j/3j-caixas-obras-manaus-03.png",
+    width: 540,
+    height: 960,
+    alt: "Caixa coletora amarela da 3J cheia de entulho em obra urbana de Manaus",
+  },
 } as const;
 
 export const HOME_VIDEOS = {
@@ -168,6 +174,10 @@ export const HOME_GALLERY = [
   {
     ...HOME_IMAGES.obraCaminhao,
     caption: "Entrega e retirada com caminhão da 3J",
+  },
+  {
+    ...HOME_IMAGES.obraAmarela,
+    caption: "Caixa coletora em uso em área urbana de Manaus",
   },
 ] as const;
 
