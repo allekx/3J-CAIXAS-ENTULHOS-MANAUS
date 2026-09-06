@@ -4,9 +4,7 @@ Sistema web da **3J Caixas Entulhos Manaus** para locação de caixas coletoras 
 
 Produção: [https://3-j-caixas-entulhos-manaus.vercel.app](https://3-j-caixas-entulhos-manaus.vercel.app)
 
-**Entrada pública atual:** a URL `/` redireciona para `/bio` enquanto a landing principal não está pronta. O código da landing permanece em `/inicio` (preview interno, sem indexação).
-
-O cliente conhece a empresa na bio (`/bio`), solicita a locação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp do responsável. A equipe opera as solicitações no painel administrativo: revisa os dados, salva alterações e **encaminha o atendimento pelo WhatsApp** para outro responsável. A geração de proposta em PDF está preparada no código, mas **desativada na interface** por enquanto (`ADMIN_PROPOSAL_PDF_ENABLED` em `src/constants/admin.ts`).
+A entrada pública é a landing em `/`. A bio (`/bio`) continua disponível para redes sociais. O cliente solicita a locação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp do responsável. A equipe opera as solicitações no painel administrativo: revisa os dados, salva alterações e **encaminha o atendimento pelo WhatsApp** para outro responsável. A geração de proposta em PDF está preparada no código, mas **desativada na interface** por enquanto (`ADMIN_PROPOSAL_PDF_ENABLED` em `src/constants/admin.ts`).
 
 ## Stack
 
@@ -62,12 +60,12 @@ Abre em [http://localhost:3000](http://localhost:3000).
 
 | Rota | Descrição |
 | --- | --- |
-| `/` | Redireciona para `/bio` (temporário) |
-| `/bio` | Entrada pública atual — link in bio, redes e CTAs |
-| `/inicio` | Preview interno da landing principal (sem indexação) |
+| `/` | Landing principal (entrada pública) |
+| `/bio` | Link in bio — redes sociais e CTAs |
+| `/inicio` | Redireciona para `/` (legado do preview) |
 | `/confirmacao-alocacao` | Fluxo de solicitação de locação (3 etapas, CNPJ opcional) + WhatsApp na etapa final |
 | `/robots.txt` | Robots dinâmico |
-| `/sitemap.xml` | Sitemap dinâmico (prioriza `/bio`) |
+| `/sitemap.xml` | Sitemap dinâmico (prioriza `/`) |
 
 ### Rotas administrativas
 
@@ -95,15 +93,15 @@ Valores da proposta e botões de PDF não aparecem enquanto `ADMIN_PROPOSAL_PDF_
 ```
 src/
 ├── app/                    # Rotas Next.js
-│   ├── (site)/             # `/` → redirect para `/bio`; landing em `/inicio`
-│   ├── bio/                # Entrada pública atual
+│   ├── (site)/             # Landing em `/`; `/inicio` → `/`
+│   ├── bio/                # Link in bio
 │   ├── confirmacao-alocacao/
 │   ├── admin/              # Login + painel
 │   ├── api/allocation-requests/
 │   ├── sitemap.ts
 │   └── robots.ts
 ├── components/
-│   ├── home/               # Landing (preview em `/inicio`)
+│   ├── home/               # Landing
 │   ├── bio/                # Bio
 │   ├── alocacao/           # Fluxo de solicitação + header da marca
 │   └── admin/              # Painel e login (`AdminLoginView`)
@@ -119,11 +117,11 @@ supabase/
 
 ## SEO
 
-Enquanto a landing não estiver pública, a entrada indexável é `/bio`. O sitemap prioriza essa rota.
+A landing em `/` é a entrada indexável principal (metadados, JSON-LD, Open Graph). O sitemap prioriza `/`, depois `/confirmacao-alocacao` e `/bio`.
 
-A landing em `/inicio` está com `noindex` e serve só para desenvolvimento/preview.
+A página `/bio` permanece disponível para tráfego de redes sociais.
 
-Quando a landing for publicada em `/`, restaurar o conteúdo da home, remover o redirect e voltar a incluir `/` no sitemap com prioridade alta.
+Após o deploy, configure o domínio em `NEXT_PUBLIC_SITE_URL` e submeta o sitemap no Google Search Console.
 
 ## Build e produção
 
@@ -177,9 +175,8 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy** (essas variáve
 
 Após o deploy, teste:
 
-- `/` redireciona para `/bio`;
+- landing (`/`);
 - bio (`/bio`);
-- preview da landing (`/inicio`), se necessário;
 - fluxo público de locação (com e sem CNPJ) e botão WhatsApp na etapa final;
 - login administrativo (`/admin/login`), dashboard, edição de solicitação e encaminhamento WhatsApp.
 

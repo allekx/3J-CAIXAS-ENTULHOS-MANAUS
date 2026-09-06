@@ -70,7 +70,7 @@ export function SuccessStep({ protocol, submittedAt }: SuccessStepProps) {
           Falar pelo WhatsApp
         </a>
         <Link
-          href={ROUTES.bio}
+          href={ROUTES.home}
           className="inline-flex min-h-12 w-full items-center justify-center border border-brand-black bg-white px-4 text-sm font-semibold tracking-wide text-brand-black uppercase transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-black"
         >
           Voltar para o início

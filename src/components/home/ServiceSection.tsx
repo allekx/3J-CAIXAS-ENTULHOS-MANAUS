@@ -1,24 +1,24 @@
-import { HOME_IMAGES, HOME_SERVICE_APPLICATIONS } from "@/constants/home";
-import { HomeImage } from "@/components/home/HomeImage";
+import { HOME_SERVICE_APPLICATIONS, HOME_VIDEOS } from "@/constants/home";
 import { HomeSection } from "@/components/home/HomeSection";
+import { HomeVideo } from "@/components/home/HomeVideo";
 import { SectionHeading } from "@/components/home/SectionHeading";
 
 export function ServiceSection() {
   return (
     <HomeSection id="servico">
-      <div className="grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-16">
-        <HomeImage
-          src={HOME_IMAGES.obra.src}
-          alt={HOME_IMAGES.obra.alt}
-          width={HOME_IMAGES.obra.width}
-          height={HOME_IMAGES.obra.height}
-          sizes="(max-width: 1024px) 100vw, 48vw"
-        />
+      <div className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-center lg:gap-16">
+        <div className="flex w-full justify-center lg:justify-start">
+          <HomeVideo
+            src={HOME_VIDEOS.service.src}
+            title={HOME_VIDEOS.service.title}
+            orientation="vertical"
+          />
+        </div>
 
-        <div>
+        <div className="min-w-0">
           <SectionHeading
-            title="Caixa coletora de 6 m³ para obras e reformas"
-            description="Solução prática para organizar resíduos de obra, reforma e limpeza em Manaus. A 3J Caixas Entulhos Manaus trabalha com caixa de entulho de 6 m³ para diferentes tipos de serviço."
+            title="Caixa coletora para obras e reformas"
+            description="Solução prática para organizar resíduos de obra, reforma e limpeza em Manaus. A 3J Caixas Entulhos Manaus atende diferentes tipos de serviço com entrega e retirada organizadas."
           />
 
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">

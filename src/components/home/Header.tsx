@@ -32,11 +32,8 @@ export function Header() {
             priority
           />
           <span className="min-w-0">
-            <span className="block truncate text-sm font-semibold text-landing-black sm:text-[15px]">
-              {HOME_COMPANY.shortName}
-            </span>
-            <span className="block truncate text-xs text-landing-muted">
-              Manaus
+            <span className="block truncate text-sm font-semibold text-brand-gold sm:text-[15px]">
+              {HOME_COMPANY.commercialName}
             </span>
           </span>
         </Link>

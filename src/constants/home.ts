@@ -1,4 +1,3 @@
-import { COLLECTOR_BOX_DEFAULTS } from "@/constants/alocacao";
 import { ROUTES } from "@/constants/site";
 import { onlyDigits } from "@/lib/utils/phone";
 
@@ -6,7 +5,9 @@ export const HOME_COMPANY = {
   legalName: "Jadaildo da Silva Gomes",
   commercialName: "3J Caixas Entulhos Manaus",
   shortName: "3J Caixas Entulhos",
+  cnpj: "64.160.751/0001-58",
   municipalRegistration: "702250001",
+  formalized: "Empresa formalizada",
   address: {
     street: "Avenida do Cetur",
     neighborhood: "Tarumã",
@@ -15,20 +16,27 @@ export const HOME_COMPANY = {
     full: "Avenida do Cetur – Tarumã\nManaus – AM",
     line: "Avenida do Cetur – Tarumã, Manaus – AM",
   },
+  googleProfile: "3J CAIXAS ENTULHOS MANAUS (verificado)",
   instagram: "@3JCAIXASENTULHOSMANAUS",
   instagramUrl: "https://www.instagram.com/3JCAIXASENTULHOSMANAUS",
   email: "jadaildodasilvagomes@gmail.com",
   phoneDisplay: "(92) 98594-6242",
   phoneDigits: "5592985946242",
+  channels: [
+    "WhatsApp",
+    "Telegram (24h)",
+    "Ligação",
+    "E-mail",
+  ] as const,
   website: "3JCAIXASENTULHOSMANAUS.COM.BR",
 } as const;
 
 export const HOME_IMAGES = {
   hero: {
-    src: "/images/3j/3j-caixa-coletora-6m3-manaus.png",
-    width: 844,
-    height: 562,
-    alt: "Caixa coletora de entulho de 6 m³ da 3J Caixas Entulhos Manaus",
+    src: "/images/3j/3j-caixa-coletora-azul-manaus.jpg",
+    width: 509,
+    height: 281,
+    alt: "Caixa coletora azul da 3J Caixas Entulhos Manaus",
   },
   obra: {
     src: "/images/3j/3j-caixa-entulho-obra-manaus.png",
@@ -42,14 +50,31 @@ export const HOME_IMAGES = {
     height: 475,
     alt: "Caixa coletora azul da 3J Caixas Entulhos em área urbana de Manaus",
   },
+  obrasDupla: {
+    src: "/images/3j/3j-caixas-obras-manaus-01.png",
+    width: 497,
+    height: 285,
+    alt: "Caixas coletoras da 3J em obra com areia e materiais em Manaus",
+  },
+  obraCaminhao: {
+    src: "/images/3j/3j-caixas-obras-manaus-02.png",
+    width: 844,
+    height: 844,
+    alt: "Caixa coletora azul da 3J com caminhão de entrega em Manaus",
+  },
+} as const;
+
+export const HOME_VIDEOS = {
+  service: {
+    src: "/videos/video-caixas-coletoras.mp4",
+    title: "Caixas coletoras da 3J em operação",
+  },
 } as const;
 
 export const HOME_NAV = [
   { label: "Início", href: "#inicio" },
   { label: "Serviço", href: "#servico" },
-  { label: "Locação", href: "#locacao" },
   { label: "Como funciona", href: "#como-funciona" },
-  { label: "Sobre", href: "#sobre" },
   { label: "Localização", href: "#localizacao" },
   { label: "FAQ", href: "#faq" },
 ] as const;
@@ -82,19 +107,9 @@ export const HOME_TRUST_ITEMS = [
 ] as const;
 
 export const HOME_HERO_TRUST = [
-  "6 m³ de capacidade",
-  "3 dias úteis",
-  "Manaus",
-] as const;
-
-export const HOME_DUMPSTER_HIGHLIGHTS = [
-  { label: "Capacidade", value: COLLECTOR_BOX_DEFAULTS.boxSize },
-  { label: "Permanência", value: "3 dias úteis" },
-  { label: "Atendimento", value: "Manaus" },
-  {
-    label: "Indicada para",
-    value: "Obras, reformas e limpezas",
-  },
+  "Entrega e retirada",
+  "Atendimento ágil",
+  "Empresa local",
 ] as const;
 
 export const HOME_STEPS = [
@@ -114,7 +129,7 @@ export const HOME_STEPS = [
     step: "03",
     title: "Receba a caixa coletora",
     description:
-      "A caixa é entregue no endereço combinado e permanece por até 3 dias úteis conforme as condições do serviço.",
+      "A caixa é entregue no endereço combinado e permanece pelo período acordado com a equipe.",
   },
 ] as const;
 
@@ -128,8 +143,8 @@ export const HOME_BENEFITS = [
     description: "Fluxo simples para receber e devolver a caixa coletora.",
   },
   {
-    title: "Caixa coletora de 6 m³",
-    description: "Capacidade adequada para diferentes tipos de serviço.",
+    title: "Capacidade adequada à obra",
+    description: "Volume pensado para diferentes tipos de serviço e descarte.",
   },
   {
     title: "Atendimento em Manaus",
@@ -145,6 +160,14 @@ export const HOME_GALLERY = [
   {
     ...HOME_IMAGES.rua,
     caption: "Atendimento em área urbana de Manaus",
+  },
+  {
+    ...HOME_IMAGES.obrasDupla,
+    caption: "Caixas coletoras em obra residencial",
+  },
+  {
+    ...HOME_IMAGES.obraCaminhao,
+    caption: "Entrega e retirada com caminhão da 3J",
   },
 ] as const;
 
@@ -212,7 +235,6 @@ export const HOME_CTA = {
   label: "Solicitar caixa coletora",
   shortLabel: "Solicitar caixa",
   href: ROUTES.confirmacaoAlocacao,
-  dumpsterLabel: "Solicitar caixa de 6 m³",
   nowLabel: "Solicitar agora",
 } as const;
 

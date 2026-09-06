@@ -25,18 +25,18 @@ export function HomeImage({
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-xl bg-landing-subtle",
+        "relative w-full overflow-hidden rounded-xl bg-landing-subtle",
         containerClassName,
       )}
+      style={{ aspectRatio: `${width} / ${height}` }}
     >
       <Image
         src={src}
         alt={alt}
-        width={width}
-        height={height}
+        fill
         priority={priority}
         sizes={sizes}
-        className={cn("h-auto w-full", className)}
+        className={cn("object-cover", className)}
       />
     </div>
   );
