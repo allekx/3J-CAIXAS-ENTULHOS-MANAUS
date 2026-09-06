@@ -9,12 +9,13 @@ export const HOME_COMPANY = {
   municipalRegistration: "702250001",
   formalized: "Empresa formalizada",
   address: {
-    street: "Avenida do Cetur",
+    street: "Estrada do Tarumã",
     neighborhood: "Tarumã",
     city: "Manaus",
     state: "AM",
-    full: "Avenida do Cetur – Tarumã\nManaus – AM",
-    line: "Avenida do Cetur – Tarumã, Manaus – AM",
+    zip: "69041-650",
+    full: "Estrada do Tarumã – Tarumã\nManaus – AM",
+    line: "Estrada do Tarumã – Tarumã, Manaus – AM",
   },
   googleProfile: "3J CAIXAS ENTULHOS MANAUS (verificado)",
   instagram: "@3JCAIXASENTULHOSMANAUS",
@@ -181,11 +182,12 @@ export const HOME_GALLERY = [
   },
 ] as const;
 
+/** Perfil oficial no Google Maps (https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8) */
 export const HOME_MAPS = {
   searchUrl:
-    "https://www.google.com/maps/search/?api=1&query=Avenida+do+Cetur,+Tarum%C3%A3,+Manaus+-+AM",
+    "https://www.google.com/maps/place/3J+CAIXAS+ENTULHOS+MANAUS/@-3.0225982,-60.0712107,17z/data=!3m1!4b1!4m6!3m5!1s0x926c17bd023fd083:0xff913899cbffe1f2!8m2!3d-3.0225982!4d-60.0712107!16s%2Fg%2F11zgw0y3f2",
   embedUrl:
-    "https://maps.google.com/maps?q=Avenida+do+Cetur,+Tarum%C3%A3,+Manaus+-+AM&z=15&output=embed",
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.1105522692654!2d-60.0686356875!3d-3.0225982!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x926c17bd023fd083%3A0xff913899cbffe1f2!2s3J%20CAIXAS%20ENTULHOS%20MANAUS!5e0!3m2!1spt-BR!2sbr!4v1735689600000!5m2!1spt-BR!2sbr",
 } as const;
 
 export const HOME_WHATSAPP_MESSAGES = {

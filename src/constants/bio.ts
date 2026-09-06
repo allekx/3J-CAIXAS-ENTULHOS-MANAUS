@@ -22,9 +22,9 @@ export const YOUTUBE_DEFAULT_URL =
 export const YOUTUBE_URL =
   process.env.NEXT_PUBLIC_YOUTUBE_URL?.trim() || YOUTUBE_DEFAULT_URL;
 
-/** Perfil oficial no Google Maps */
+/** Perfil oficial no Google Maps (https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8) */
 export const GOOGLE_MAPS_PLACE_URL =
-  "https://www.google.com/maps/place/3J+CAIXAS+ENTULHOS+MANAUS+-+Estrada+do+tarum%C3%A3+-+Tarum%C3%A3,+Manaus+-+AM,+69041-650/@-3.0225982,-60.0712107,15z/data=!4m6!3m5!1s0x926c17bd023fd083:0xff913899cbffe1f2!8m2!3d-3.0225982!4d-60.0712107!16s%2Fg%2F11zgw0y3f2";
+  "https://www.google.com/maps/place/3J+CAIXAS+ENTULHOS+MANAUS/@-3.0225982,-60.0712107,17z/data=!3m1!4b1!4m6!3m5!1s0x926c17bd023fd083:0xff913899cbffe1f2!8m2!3d-3.0225982!4d-60.0712107!16s%2Fg%2F11zgw0y3f2";
 
 /**
  * Iframe embed do perfil oficial (place ID do Google Maps).

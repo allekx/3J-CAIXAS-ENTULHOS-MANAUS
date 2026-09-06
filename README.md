@@ -4,7 +4,16 @@ Sistema web da **3J Caixas Entulhos Manaus** para locação de caixas coletoras 
 
 Produção: [https://3-j-caixas-entulhos-manaus.vercel.app](https://3-j-caixas-entulhos-manaus.vercel.app)
 
-A entrada pública é a landing em `/`. A bio (`/bio`) continua disponível para redes sociais. O cliente solicita a locação em `/confirmacao-alocacao`, recebe um protocolo gerado no banco e pode continuar pelo WhatsApp do responsável. A equipe opera as solicitações no painel administrativo: revisa os dados, salva alterações e **encaminha o atendimento pelo WhatsApp** para outro responsável. A geração de proposta em PDF está preparada no código, mas **desativada na interface** por enquanto (`ADMIN_PROPOSAL_PDF_ENABLED` em `src/constants/admin.ts`).
+## Visão geral
+
+- **Entrada pública:** landing em `/` (SEO, galeria, FAQ, mapa, CTAs).
+- **Bio:** `/bio` para redes sociais.
+- **Locação:** `/confirmacao-alocacao` — formulário em 3 etapas (CNPJ opcional), aceite dos **Termos e Condições**, geração de protocolo no banco e WhatsApp na etapa final.
+- **Documentos públicos:** Termos (`/confirmacao-alocacao/termos`) e Política de Privacidade LGPD (`/confirmacao-alocacao/privacidade`).
+- **Painel admin:** login com identidade visual da marca; dashboard; lista e detalhe de solicitações; registro do aceite dos termos; encaminhamento WhatsApp.
+- **PDF de proposta:** código preparado, UI desativada (`ADMIN_PROPOSAL_PDF_ENABLED = false` em `src/constants/admin.ts`).
+
+Permanência padrão da caixa: **3 dias úteis** (ultrapassar gera acréscimo).
 
 ## Stack
 
@@ -13,6 +22,7 @@ A entrada pública é a landing em `/`. A bio (`/bio`) continua disponível para
 - Tailwind CSS 4
 - Supabase (Auth, Postgres, RLS)
 - Zod
+- `@upstash/ratelimit` + `@upstash/redis` (rate limit da API pública; opcional em produção)
 - `@react-pdf/renderer` (proposta comercial em memória — uso futuro)
 - Lucide Icons
 
@@ -33,7 +43,7 @@ Requisito: Node.js ≥ 20.9.0.
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Browser e servidor | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Browser e servidor | Chave anon (RLS bloqueia tabelas) |
-| `SUPABASE_SERVICE_ROLE_KEY` | **Somente servidor** | Inserts e painel via API/server actions |
+| `SUPABASE_SERVICE_ROLE_KEY` | **Somente servidor** | Inserts e painel (aceita `service_role` legada `eyJ...` ou `sb_secret_...`) |
 | `NEXT_PUBLIC_COMPANY_WHATSAPP` | Browser | WhatsApp da empresa (DDI + número, só dígitos). Padrão: `5592985946242` |
 | `NEXT_PUBLIC_SITE_URL` | Browser | URL pública do site (canonical, sitemap, Open Graph) |
 | `NEXT_PUBLIC_BIO_WEBSITE_URL` | Browser | Site institucional na `/bio` (opcional) |
@@ -46,7 +56,7 @@ Requisito: Node.js ≥ 20.9.0.
 
 Padrões da `/bio` e links fixos (Google Maps, WhatsApp) estão em `src/constants/bio.ts`.
 
-O número de WhatsApp oficial da empresa é **+55 92 98594-6242** (`5592985946242`). Ele é usado na landing, na bio e no botão **Falar pelo WhatsApp** da etapa final de `/confirmacao-alocacao`. Se `NEXT_PUBLIC_COMPANY_WHATSAPP` estiver vazia, o código usa esse número como fallback.
+O número de WhatsApp oficial é **+55 92 98594-6242** (`5592985946242`). Usado na landing, na bio e no botão **Falar pelo WhatsApp** da etapa final de `/confirmacao-alocacao`.
 
 Nunca prefixe `SUPABASE_SERVICE_ROLE_KEY` com `NEXT_PUBLIC_`.
 
@@ -64,33 +74,41 @@ Abre em [http://localhost:3000](http://localhost:3000).
 | --- | --- |
 | `/` | Landing principal (entrada pública) |
 | `/bio` | Link in bio — redes sociais e CTAs |
-| `/inicio` | Redireciona para `/` (legado do preview) |
-| `/confirmacao-alocacao` | Fluxo de solicitação de locação (3 etapas, CNPJ opcional) + WhatsApp na etapa final |
-| `/confirmacao-alocacao/termos` | Termos e Condições da locação |
+| `/inicio` | Redireciona para `/` (legado) |
+| `/confirmacao-alocacao` | Solicitação de locação (3 etapas) + WhatsApp na etapa final |
+| `/confirmacao-alocacao/termos` | Termos e Condições |
 | `/confirmacao-alocacao/privacidade` | Política de Privacidade (LGPD) |
 | `/robots.txt` | Robots dinâmico |
-| `/sitemap.xml` | Sitemap dinâmico (prioriza `/`) |
+| `/sitemap.xml` | Sitemap dinâmico |
 
 ### Rotas administrativas
 
 | Rota | Descrição |
 | --- | --- |
-| `/admin/login` | Login com identidade visual da marca (logo, preto e dourado) |
+| `/admin/login` | Login (logo oficial, preto e dourado) |
 | `/admin` | Dashboard operacional |
-| `/admin/solicitacoes` | Lista de solicitações |
-| `/admin/solicitacoes/[id]` | Detalhe, edição e encaminhamento WhatsApp |
-| `/admin/solicitacoes/[id]/proposta` | API de PDF (existente; UI oculta por padrão) |
+| `/admin/solicitacoes` | Lista com busca + filtros avançados (“Filtrar por”) |
+| `/admin/solicitacoes/[id]` | Detalhe, edição, aceite dos termos e encaminhamento WhatsApp |
+| `/admin/solicitacoes/[id]/proposta` | API de PDF (UI oculta por padrão) |
 
-A tela `/admin/login` usa o logo oficial (`public/logos/logo-3j-oficial.jpg`), fundo preto e acentos dourados da marca. O restante do painel mantém o layout operacional.
+Login e sidebar do painel usam o logo oficial (`public/logos/logo-3j-oficial.jpg`). Favicon do site também usa a logo da marca.
 
-### Fluxo do painel (atual)
+### Fluxo público de locação
+
+1. Preencher dados (CNPJ opcional) e aceitar os Termos e Condições.
+2. Revisar informações da caixa (6 m³, permanência de 3 dias úteis).
+3. Confirmar — o servidor valida o payload (Zod), aplica rate limit e grava a solicitação com protocolo + aceite dos termos.
+4. Na etapa final, falar pelo WhatsApp e consultar a Política de Privacidade.
+
+### Fluxo do painel
 
 1. Abrir a solicitação em **Solicitações**.
 2. Revisar ou ajustar dados (cliente, endereço, caixa, datas, observações internas).
-3. **Salvar alterações**.
-4. **Encaminhar atendimento** — abre o WhatsApp com mensagem formatada para o outro atendente.
+3. Conferir o **aceite dos Termos** (data/hora e versão), quando registrado.
+4. **Salvar alterações**.
+5. **Encaminhar atendimento** — WhatsApp com mensagem formatada (inclui o aceite, se houver).
 
-Valores da proposta e botões de PDF não aparecem enquanto `ADMIN_PROPOSAL_PDF_ENABLED` é `false`. Para reativar no futuro, altere essa constante para `true`.
+Valores da proposta e botões de PDF não aparecem enquanto `ADMIN_PROPOSAL_PDF_ENABLED` é `false`.
 
 ## Estrutura do projeto (resumo)
 
@@ -98,22 +116,24 @@ Valores da proposta e botões de PDF não aparecem enquanto `ADMIN_PROPOSAL_PDF_
 src/
 ├── app/                    # Rotas Next.js
 │   ├── (site)/             # Landing em `/`; `/inicio` → `/`
-│   ├── bio/                # Link in bio
-│   ├── confirmacao-alocacao/
+│   ├── bio/
+│   ├── confirmacao-alocacao/   # Fluxo + /termos + /privacidade
 │   ├── admin/              # Login + painel
 │   ├── api/allocation-requests/
 │   ├── sitemap.ts
 │   └── robots.ts
 ├── components/
-│   ├── home/               # Landing
-│   ├── bio/                # Bio
+│   ├── home/               # Landing (animações, galeria, FAQ)
+│   ├── bio/
 │   ├── alocacao/           # Fluxo de solicitação + header da marca
-│   └── admin/              # Painel e login (`AdminLoginView`)
-├── constants/              # home.ts, bio.ts, alocacao.ts, admin.ts, site.ts
-└── lib/                    # SEO, Supabase, PDF, validação, documento (CNPJ)
+│   └── admin/              # Painel, login, filtros, formulários
+├── constants/              # home, bio, alocacao, termos, privacidade, admin, site
+└── lib/                    # SEO, Supabase, rate limit, PDF, validação, LGPD helpers
 public/
 ├── images/3j/              # Fotos da empresa
-└── logos/                  # Logo oficial (login e locação)
+├── logos/                  # Logo oficial
+├── videos/                 # Vídeo do serviço
+└── favicon.ico
 supabase/
 ├── schema.sql
 └── migrations/
@@ -121,9 +141,7 @@ supabase/
 
 ## SEO
 
-A landing em `/` é a entrada indexável principal (metadados, JSON-LD, Open Graph). O sitemap prioriza `/`, depois `/confirmacao-alocacao` e `/bio`.
-
-A página `/bio` permanece disponível para tráfego de redes sociais.
+A landing em `/` é a entrada indexável principal (metadados, JSON-LD, Open Graph). O sitemap inclui `/`, locação, termos, privacidade e `/bio`.
 
 Após o deploy, configure o domínio em `NEXT_PUBLIC_SITE_URL` e submeta o sitemap no Google Search Console.
 
@@ -143,19 +161,24 @@ npm start
    - `003_dashboard_operation_indexes.sql` — índices do dashboard
    - `004_customer_document.sql` — coluna `customer_document` (CNPJ opcional)
    - `005_cnpj_optional.sql` — constraint do CNPJ
-   - `006_terms_accepted.sql` — aceite dos Termos e Condições (`terms_accepted_at`, `terms_version`)
+   - `006_terms_accepted.sql` — aceite dos Termos (`terms_accepted_at`, `terms_version`)
 3. Confirme RLS ativo nas tabelas `allocation_requests` e `allocation_protocol_counters`, sem políticas para `anon`/`authenticated`.
 4. Em Authentication:
    - desative o cadastro público (sign-ups);
-   - crie os usuários administrativos manualmente no dashboard;
+   - crie os usuários administrativos **manualmente** no dashboard (qualquer usuário Auth autenticado acessa o painel);
    - não habilite recuperação de senha pública se não for necessário.
-5. Copie URL, anon key e service role key para `.env.local` (local) e para a Vercel (produção).
+5. Copie URL, anon key e service role / secret key para `.env.local` e para a Vercel.
 
 O protocolo (`3J-AAAA-000000`) é gerado no banco. O cliente nunca envia protocolo, status, valores ou observações internas.
 
-A API pública `POST /api/allocation-requests` tem rate limit de **5 tentativas por IP a cada 15 minutos**. Sem Upstash, o limite roda em memória do processo (suficiente em localhost). Em produção na Vercel, recomenda-se criar um **Upstash Redis** no Marketplace e cadastrar `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` como Config.
+### Rate limit da API pública
 
-Se o painel exibir erro ao abrir uma solicitação com mensagem sobre coluna inexistente, execute as migrations pendentes no **SQL Editor** do Supabase.
+`POST /api/allocation-requests` limita **5 tentativas por IP a cada 15 minutos**.
+
+- Sem Upstash: limite em memória do processo (ok em localhost).
+- Em produção na Vercel: recomenda-se **Upstash Redis** no Marketplace e as variáveis `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` como **Config**.
+
+Se o painel falhar por coluna inexistente, execute as migrations pendentes no **SQL Editor** do Supabase.
 
 ## Deploy (Vercel)
 
@@ -178,25 +201,28 @@ Valores atuais esperados em produção:
 | `NEXT_PUBLIC_SITE_URL` | `https://3-j-caixas-entulhos-manaus.vercel.app` |
 | `NEXT_PUBLIC_COMPANY_WHATSAPP` | `5592985946242` |
 
-Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy** (essas variáveis entram no build).
+Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 
-Após o deploy, teste:
+### Checklist pós-deploy
 
-- landing (`/`);
-- bio (`/bio`);
-- fluxo público de locação (com e sem CNPJ) e botão WhatsApp na etapa final;
-- login administrativo (`/admin/login`), dashboard, edição de solicitação e encaminhamento WhatsApp.
+- Landing (`/`)
+- Bio (`/bio`)
+- Locação (com e sem CNPJ), Termos, Privacidade e WhatsApp na etapa final
+- Login admin, dashboard, lista/filtros, detalhe com aceite dos termos e encaminhamento WhatsApp
+- Rate limit (opcional: confirmar Upstash em produção)
 
 ## Empresa (referência)
 
 | Campo | Valor |
 | --- | --- |
 | Nome | 3J Caixas Entulhos Manaus |
+| Razão social | Jadaildo da Silva Gomes |
+| CNPJ | 64.160.751/0001-58 |
+| Inscrição municipal | 702250001 |
 | Serviço | Locação de caixa coletora de entulho 6 m³ |
 | Permanência padrão | 3 dias úteis |
-| Telefone | (92) 98594-6242 |
-| WhatsApp | +55 92 98594-6242 (`5592985946242`) |
+| Telefone / WhatsApp | (92) 98594-6242 (`5592985946242`) |
 | E-mail | jadaildodasilvagomes@gmail.com |
-| Instagram | @3_j_caixas_entulhos_manaus |
-| Localização | Estrada do Tarumã – Tarumã, Manaus – AM |
+| Instagram | @3JCAIXASENTULHOSMANAUS |
+| Localização | Estrada do Tarumã – Tarumã, Manaus – AM ([Maps](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8)) |
 | Produção | https://3-j-caixas-entulhos-manaus.vercel.app |

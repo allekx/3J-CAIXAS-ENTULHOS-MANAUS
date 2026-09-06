@@ -29,8 +29,15 @@ export function buildHomeStructuredData() {
       streetAddress: HOME_COMPANY.address.street,
       addressLocality: HOME_COMPANY.address.city,
       addressRegion: HOME_COMPANY.address.state,
+      postalCode: HOME_COMPANY.address.zip,
       addressCountry: "BR",
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: -3.0225982,
+      longitude: -60.0712107,
+    },
+    hasMap: "https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8",
     areaServed: {
       "@type": "City",
       name: "Manaus",
@@ -39,7 +46,7 @@ export function buildHomeStructuredData() {
         name: "Amazonas",
       },
     },
-    sameAs: [HOME_COMPANY.instagramUrl],
+    sameAs: [HOME_COMPANY.instagramUrl, "https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8"],
   };
 
   const organization = {
