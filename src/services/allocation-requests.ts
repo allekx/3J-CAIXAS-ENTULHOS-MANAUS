@@ -3,6 +3,7 @@ import "server-only";
 import { parseCreateAllocationRequest } from "@/lib/alocacao/create-allocation-request.schema";
 import { COLLECTOR_BOX_DEFAULTS } from "@/constants/alocacao";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { withAdminQueryRetry } from "@/lib/supabase/admin-query-retry";
 import type { AllocationRequestInsert } from "@/types/allocation-request";
 
 export function toAllocationRequestInsert(
@@ -32,14 +33,23 @@ export async function createAllocationRequest(input: unknown) {
   const row = toAllocationRequestInsert(input);
   const supabase = createSupabaseAdminClient();
 
-  const { data, error } = await supabase
-    .from("allocation_requests")
-    .insert(row)
-    .select("protocol, created_at, status")
-    .single();
+  const { data, error } = await withAdminQueryRetry(
+    () =>
+      supabase
+        .from("allocation_requests")
+        .insert(row)
+        .select("protocol, created_at, status")
+        .single(),
+    "createAllocationRequest",
+  );
 
   if (error || !data) {
-    console.error("[allocation-requests] Falha ao inserir solicitação.", error);
+    console.error("[allocation-requests] Falha ao inserir solicitação.", {
+      message: error?.message,
+      code: error?.code,
+      details: error?.details,
+      hint: error?.hint,
+    });
     throw new Error("ALLOCATION_INSERT_FAILED");
   }
 

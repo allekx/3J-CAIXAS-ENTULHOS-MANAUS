@@ -6,6 +6,7 @@ import {
   toUpdateAllocationRequestRow,
 } from "@/lib/alocacao/update-allocation-request.schema";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { withAdminQueryRetry } from "@/lib/supabase/admin-query-retry";
 import { onlyDigits } from "@/lib/utils/phone";
 import { ALLOCATION_STATUSES } from "@/types/allocation-request";
 import type {
@@ -89,38 +90,45 @@ type CountFilters = {
 };
 
 async function countRequests(supabase: AdminClient, filters: CountFilters = {}) {
-  let query = supabase
-    .from("allocation_requests")
-    .select("id", { count: "exact", head: true });
+  const { count, error } = await withAdminQueryRetry(async () => {
+    let query = supabase
+      .from("allocation_requests")
+      .select("id", { count: "exact", head: true });
 
-  if (filters.status) {
-    query = query.eq("status", filters.status);
-  }
+    if (filters.status) {
+      query = query.eq("status", filters.status);
+    }
 
-  if (filters.createdFromUtc) {
-    query = query.gte("created_at", filters.createdFromUtc);
-  }
+    if (filters.createdFromUtc) {
+      query = query.gte("created_at", filters.createdFromUtc);
+    }
 
-  if (filters.createdToExclusiveUtc) {
-    query = query.lt("created_at", filters.createdToExclusiveUtc);
-  }
+    if (filters.createdToExclusiveUtc) {
+      query = query.lt("created_at", filters.createdToExclusiveUtc);
+    }
 
-  if (filters.deliveryDate) {
-    query = query.eq("delivery_date", filters.deliveryDate);
-  }
+    if (filters.deliveryDate) {
+      query = query.eq("delivery_date", filters.deliveryDate);
+    }
 
-  if (filters.pickupDate) {
-    query = query.eq("pickup_date", filters.pickupDate);
-  }
+    if (filters.pickupDate) {
+      query = query.eq("pickup_date", filters.pickupDate);
+    }
 
-  if (filters.excludeCancelled) {
-    query = query.neq("status", "cancelled");
-  }
+    if (filters.excludeCancelled) {
+      query = query.neq("status", "cancelled");
+    }
 
-  const { count, error } = await query;
+    return query;
+  }, "countRequests");
 
   if (error) {
-    console.error("[admin] Falha ao contar solicitações.", error);
+    console.error("[admin] Falha ao contar solicitações.", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    });
     throw new Error("ADMIN_COUNT_FAILED");
   }
 
@@ -132,18 +140,29 @@ async function listTodayOperations(
   field: "delivery_date" | "pickup_date",
   isoDate: string,
 ): Promise<DashboardOperation[]> {
-  const { data, error } = await supabase
-    .from("allocation_requests")
-    .select(
-      "id, protocol, customer_name, customer_phone, street, address_number, complement, neighborhood, city, box_type, box_size",
-    )
-    .eq(field, isoDate)
-    .neq("status", "cancelled")
-    .order("protocol", { ascending: true })
-    .limit(DASHBOARD_OPERATIONS_LIMIT);
+  const { data, error } = await withAdminQueryRetry(
+    () =>
+      supabase
+        .from("allocation_requests")
+        .select(
+          "id, protocol, customer_name, customer_phone, street, address_number, complement, neighborhood, city, box_type, box_size",
+        )
+        .eq(field, isoDate)
+        .neq("status", "cancelled")
+        .order("protocol", { ascending: true })
+        .limit(DASHBOARD_OPERATIONS_LIMIT),
+    `listTodayOperations:${field}`,
+  );
 
   if (error) {
-    console.error("[admin] Falha ao listar operações do dia.", error);
+    console.error("[admin] Falha ao listar operações do dia.", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      field,
+      isoDate,
+    });
     throw new Error("ADMIN_OPERATIONS_FAILED");
   }
 
@@ -154,16 +173,25 @@ async function listRecentRequests(
   supabase: AdminClient,
   limit: number,
 ): Promise<AdminRequestListItem[]> {
-  const { data, error } = await supabase
-    .from("allocation_requests")
-    .select(
-      "id, protocol, customer_name, customer_phone, city, neighborhood, created_at, status",
-    )
-    .order("created_at", { ascending: false })
-    .limit(limit);
+  const { data, error } = await withAdminQueryRetry(
+    () =>
+      supabase
+        .from("allocation_requests")
+        .select(
+          "id, protocol, customer_name, customer_phone, city, neighborhood, created_at, status",
+        )
+        .order("created_at", { ascending: false })
+        .limit(limit),
+    "listRecentRequests",
+  );
 
   if (error) {
-    console.error("[admin] Falha ao listar solicitações recentes.", error);
+    console.error("[admin] Falha ao listar solicitações recentes.", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    });
     throw new Error("ADMIN_LIST_FAILED");
   }
 
@@ -232,49 +260,56 @@ export async function listAllocationRequests(
   const supabase = createSupabaseAdminClient();
   const limit = options.limit ?? 100;
 
-  let query = supabase
-    .from("allocation_requests")
-    .select(
-      "id, protocol, customer_name, customer_phone, city, neighborhood, created_at, status",
-    )
-    .order("created_at", { ascending: false })
-    .limit(limit);
+  const { data, error } = await withAdminQueryRetry(async () => {
+    let query = supabase
+      .from("allocation_requests")
+      .select(
+        "id, protocol, customer_name, customer_phone, city, neighborhood, created_at, status",
+      )
+      .order("created_at", { ascending: false })
+      .limit(limit);
 
-  if (options.status) {
-    query = query.eq("status", options.status);
-  }
-
-  if (options.from && isIsoDate(options.from)) {
-    query = query.gte("created_at", `${options.from}T00:00:00.000Z`);
-  }
-
-  if (options.to && isIsoDate(options.to)) {
-    query = query.lte("created_at", `${options.to}T23:59:59.999Z`);
-  }
-
-  const search = sanitizeSearchTerm(options.query ?? "");
-
-  if (search.length > 0) {
-    const digits = onlyDigits(search);
-    const filters = [
-      `protocol.ilike.%${search}%`,
-      `customer_name.ilike.%${search}%`,
-      `customer_phone.ilike.%${search}%`,
-      `street.ilike.%${search}%`,
-      `condominium.ilike.%${search}%`,
-    ];
-
-    if (digits.length >= 3) {
-      filters.push(`customer_phone.ilike.%${digits}%`);
+    if (options.status) {
+      query = query.eq("status", options.status);
     }
 
-    query = query.or(filters.join(","));
-  }
+    if (options.from && isIsoDate(options.from)) {
+      query = query.gte("created_at", `${options.from}T00:00:00.000Z`);
+    }
 
-  const { data, error } = await query;
+    if (options.to && isIsoDate(options.to)) {
+      query = query.lte("created_at", `${options.to}T23:59:59.999Z`);
+    }
+
+    const search = sanitizeSearchTerm(options.query ?? "");
+
+    if (search.length > 0) {
+      const digits = onlyDigits(search);
+      const filters = [
+        `protocol.ilike.%${search}%`,
+        `customer_name.ilike.%${search}%`,
+        `customer_phone.ilike.%${search}%`,
+        `street.ilike.%${search}%`,
+        `condominium.ilike.%${search}%`,
+      ];
+
+      if (digits.length >= 3) {
+        filters.push(`customer_phone.ilike.%${digits}%`);
+      }
+
+      query = query.or(filters.join(","));
+    }
+
+    return query;
+  }, "listAllocationRequests");
 
   if (error) {
-    console.error("[admin] Falha ao listar solicitações.", error);
+    console.error("[admin] Falha ao listar solicitações.", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    });
     throw new Error("ADMIN_LIST_FAILED");
   }
 
@@ -320,16 +355,25 @@ export async function getAllocationRequestById(
   await requireAdminUser();
   const supabase = createSupabaseAdminClient();
 
-  const { data, error } = await supabase
-    .from("allocation_requests")
-    .select(
-      "id, protocol, status, customer_name, customer_phone, customer_document, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at",
-    )
-    .eq("id", id)
-    .maybeSingle();
+  const { data, error } = await withAdminQueryRetry(
+    () =>
+      supabase
+        .from("allocation_requests")
+        .select(
+          "id, protocol, status, customer_name, customer_phone, customer_document, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at",
+        )
+        .eq("id", id)
+        .maybeSingle(),
+    "getAllocationRequestById",
+  );
 
   if (error) {
-    console.error("[admin] Falha ao carregar solicitação.", error);
+    console.error("[admin] Falha ao carregar solicitação.", {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+    });
     throw new Error("ADMIN_DETAIL_FAILED");
   }
 
@@ -341,40 +385,49 @@ export async function updateAllocationRequest(id: string, input: unknown) {
   const data = toUpdateAllocationRequestRow(parseUpdateAllocationRequest(input));
   const supabase = createSupabaseAdminClient();
 
-  const { data: updated, error } = await supabase
-    .from("allocation_requests")
-    .update({
-      status: data.status,
-      customer_name: data.customer_name,
-      customer_phone: data.customer_phone,
-      customer_document: data.customer_document,
-      street: data.street,
-      address_number: data.address_number,
-      complement: data.complement,
-      neighborhood: data.neighborhood,
-      condominium: data.condominium,
-      city: data.city,
-      payment_method: data.payment_method,
-      box_type: data.box_type,
-      box_size: data.box_size,
-      quantity: data.quantity,
-      rental_days: data.rental_days,
-      delivery_date: data.delivery_date,
-      pickup_date: data.pickup_date,
-      admin_notes: data.admin_notes,
-      assigned_to: data.assigned_to,
-      service_value: data.service_value,
-      additional_value: data.additional_value,
-      discount_value: data.discount_value,
-      total_value: data.total_value,
-      proposal_notes: data.proposal_notes,
-    })
-    .eq("id", id)
-    .select("id")
-    .maybeSingle();
+  const { data: updated, error } = await withAdminQueryRetry(
+    () =>
+      supabase
+        .from("allocation_requests")
+        .update({
+          status: data.status,
+          customer_name: data.customer_name,
+          customer_phone: data.customer_phone,
+          customer_document: data.customer_document,
+          street: data.street,
+          address_number: data.address_number,
+          complement: data.complement,
+          neighborhood: data.neighborhood,
+          condominium: data.condominium,
+          city: data.city,
+          payment_method: data.payment_method,
+          box_type: data.box_type,
+          box_size: data.box_size,
+          quantity: data.quantity,
+          rental_days: data.rental_days,
+          delivery_date: data.delivery_date,
+          pickup_date: data.pickup_date,
+          admin_notes: data.admin_notes,
+          assigned_to: data.assigned_to,
+          service_value: data.service_value,
+          additional_value: data.additional_value,
+          discount_value: data.discount_value,
+          total_value: data.total_value,
+          proposal_notes: data.proposal_notes,
+        })
+        .eq("id", id)
+        .select("id")
+        .maybeSingle(),
+    "updateAllocationRequest",
+  );
 
   if (error || !updated) {
-    console.error("[admin] Falha ao atualizar solicitação.", error);
+    console.error("[admin] Falha ao atualizar solicitação.", {
+      message: error?.message,
+      code: error?.code,
+      details: error?.details,
+      hint: error?.hint,
+    });
     throw new Error("ADMIN_UPDATE_FAILED");
   }
 
