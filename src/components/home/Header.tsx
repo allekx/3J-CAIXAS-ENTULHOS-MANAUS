@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils/cn";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -19,8 +20,22 @@ export function Header() {
     };
   }, [open]);
 
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-landing-border/80 bg-white/90 backdrop-blur-md">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b bg-white/90 backdrop-blur-md transition-[border-color,box-shadow] duration-300",
+        scrolled
+          ? "border-landing-border shadow-[0_8px_30px_rgba(8,10,13,0.06)]"
+          : "border-landing-border/80 shadow-none",
+      )}
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
         <Link href={ROUTES.home} className="flex min-w-0 items-center gap-3">
           <Image
@@ -46,7 +61,7 @@ export function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="text-sm text-landing-muted transition-colors hover:text-landing-black"
+              className="relative text-sm text-landing-muted transition-colors hover:text-landing-black after:absolute after:inset-x-0 after:-bottom-1 after:h-px after:origin-left after:scale-x-0 after:bg-brand-gold after:transition-transform after:duration-300 hover:after:scale-x-100"
             >
               {item.label}
             </a>
@@ -64,7 +79,7 @@ export function Header() {
 
         <button
           type="button"
-          className="inline-flex size-10 items-center justify-center rounded-md text-landing-black ring-1 ring-landing-border lg:hidden"
+          className="inline-flex size-10 items-center justify-center rounded-md text-landing-black ring-1 ring-landing-border transition-colors hover:bg-landing-subtle lg:hidden"
           aria-expanded={open}
           aria-controls="home-mobile-menu"
           aria-label={open ? "Fechar menu" : "Abrir menu"}

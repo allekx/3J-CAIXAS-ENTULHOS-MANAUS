@@ -38,6 +38,13 @@ export function SectionHeading({
       >
         {title}
       </h2>
+      <span
+        aria-hidden="true"
+        className={cn(
+          "mt-4 block h-px w-12 bg-brand-gold/80",
+          align === "center" && "mx-auto",
+        )}
+      />
       {description ? (
         <p
           className={cn(

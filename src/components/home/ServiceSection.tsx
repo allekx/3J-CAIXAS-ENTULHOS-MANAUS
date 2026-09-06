@@ -1,4 +1,5 @@
 import { HOME_SERVICE_APPLICATIONS, HOME_VIDEOS } from "@/constants/home";
+import { HomeReveal } from "@/components/home/HomeReveal";
 import { HomeSection } from "@/components/home/HomeSection";
 import { HomeVideo } from "@/components/home/HomeVideo";
 import { SectionHeading } from "@/components/home/SectionHeading";
@@ -7,15 +8,15 @@ export function ServiceSection() {
   return (
     <HomeSection id="servico">
       <div className="grid gap-8 sm:gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:items-center lg:gap-16">
-        <div className="flex w-full justify-center lg:justify-start">
+        <HomeReveal className="flex w-full justify-center lg:justify-start">
           <HomeVideo
             src={HOME_VIDEOS.service.src}
             title={HOME_VIDEOS.service.title}
             orientation="vertical"
           />
-        </div>
+        </HomeReveal>
 
-        <div className="min-w-0">
+        <HomeReveal delay={120} className="min-w-0">
           <SectionHeading
             title="Caixa coletora para obras e reformas"
             description="Solução prática para organizar resíduos de obra, reforma e limpeza em Manaus. A 3J Caixas Entulhos Manaus atende diferentes tipos de serviço com entrega e retirada organizadas."
@@ -25,7 +26,7 @@ export function ServiceSection() {
             {HOME_SERVICE_APPLICATIONS.map((item) => (
               <li
                 key={item}
-                className="flex items-center gap-3 text-sm text-landing-black sm:text-[15px]"
+                className="flex items-center gap-3 text-sm text-landing-black transition-colors duration-200 hover:text-brand-gold sm:text-[15px]"
               >
                 <span
                   aria-hidden="true"
@@ -35,7 +36,7 @@ export function ServiceSection() {
               </li>
             ))}
           </ul>
-        </div>
+        </HomeReveal>
       </div>
     </HomeSection>
   );

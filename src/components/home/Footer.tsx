@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { GOOGLE_MAPS_PLACE_URL } from "@/constants/bio";
+import { HomeReveal } from "@/components/home/HomeReveal";
 import {
   HOME_COMPANY,
   HOME_CTA,
@@ -13,7 +14,7 @@ export function Footer() {
 
   return (
     <footer className="bg-landing-black text-white">
-      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
+      <HomeReveal className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div>
             <p className="text-base font-semibold tracking-tight text-brand-gold">
@@ -144,7 +145,7 @@ export function Footer() {
             <p className="mt-8">
               <Link
                 href={HOME_CTA.href}
-                className="inline-flex min-h-11 items-center bg-brand-gold px-4 text-xs font-semibold tracking-wide text-brand-black uppercase transition-colors hover:bg-brand-gold-dark"
+                className="inline-flex min-h-11 items-center bg-brand-gold px-4 text-xs font-semibold tracking-wide text-brand-black uppercase transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-dark motion-reduce:hover:translate-y-0"
               >
                 Solicitar caixa coletora
               </Link>
@@ -169,7 +170,7 @@ export function Footer() {
             </Link>
           </p>
         </div>
-      </div>
+      </HomeReveal>
     </footer>
   );
 }

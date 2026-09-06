@@ -1,4 +1,5 @@
 import { HOME_TRUST_ITEMS } from "@/constants/home";
+import { HomeReveal } from "@/components/home/HomeReveal";
 
 export function TrustBar() {
   return (
@@ -8,8 +9,9 @@ export function TrustBar() {
     >
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-8 sm:px-6 md:grid-cols-4 md:gap-0 md:py-9">
         {HOME_TRUST_ITEMS.map((item, index) => (
-          <div
+          <HomeReveal
             key={item.title}
+            delay={index * 70}
             className="md:border-r md:border-landing-border md:px-6 md:last:border-r-0 md:first:pl-0"
           >
             <p className="text-sm font-semibold text-landing-black sm:text-[15px]">
@@ -21,7 +23,7 @@ export function TrustBar() {
             {index < HOME_TRUST_ITEMS.length - 1 ? (
               <div className="mt-4 h-px bg-landing-border md:hidden" />
             ) : null}
-          </div>
+          </HomeReveal>
         ))}
       </div>
     </section>
