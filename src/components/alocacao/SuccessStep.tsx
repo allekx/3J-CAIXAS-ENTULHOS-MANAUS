@@ -85,12 +85,14 @@ export function SuccessStep({ protocol, submittedAt }: SuccessStepProps) {
         />
         <p>
           Seus dados estão seguros conosco.{" "}
-          <a
+          <Link
             href={PRIVACY_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
             className="font-medium text-brand-black underline-offset-2 hover:underline"
           >
             Política de Privacidade
-          </a>
+          </Link>
         </p>
       </footer>
     </section>

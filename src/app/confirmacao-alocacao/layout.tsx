@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { AllocationHeader } from "@/components/alocacao/AllocationHeader";
 
 export default function ConfirmacaoAlocacaoLayout({
   children,
@@ -7,9 +6,6 @@ export default function ConfirmacaoAlocacaoLayout({
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-h-dvh flex-col bg-white">
-      <AllocationHeader />
-      <main className="flex-1">{children}</main>
-    </div>
+    <div className="flex min-h-dvh flex-col bg-white">{children}</div>
   );
 }

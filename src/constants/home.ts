@@ -202,7 +202,7 @@ export const HOME_FAQ = [
   {
     question: "Por quanto tempo a caixa coletora fica na obra?",
     answer:
-      "A permanência padrão informada pela empresa é de 3 dias úteis.",
+      "A permanência informada pela empresa é de 3 dias úteis. Ultrapassar esse prazo resulta em acréscimo no valor.",
   },
   {
     question: "Para quais tipos de serviço posso solicitar uma caixa coletora?",

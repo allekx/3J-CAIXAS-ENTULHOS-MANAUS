@@ -47,6 +47,9 @@ export const createAllocationRequestSchema = z
     condominium: sanitizeOptionalText(ALLOCATION_FIELD_LIMITS.condominium),
     city: sanitizeRequiredText(ALLOCATION_FIELD_LIMITS.city),
     payment_method: z.enum(PAYMENT_METHODS),
+    accepted_terms: z.literal(true, {
+      error: "É necessário aceitar os Termos e Condições.",
+    }),
   })
   .strict();
 

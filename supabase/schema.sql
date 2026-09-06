@@ -59,6 +59,8 @@ create table if not exists public.allocation_requests (
   discount_value numeric(12,2) not null default 0,
   total_value numeric(12,2) not null default 0,
   proposal_notes text,
+  terms_accepted_at timestamptz,
+  terms_version text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint allocation_requests_status_check
@@ -130,7 +132,12 @@ create table if not exists public.allocation_requests (
   constraint allocation_requests_total_value_check
     check (total_value >= 0),
   constraint allocation_requests_proposal_notes_len
-    check (proposal_notes is null or char_length(proposal_notes) <= 2000)
+    check (proposal_notes is null or char_length(proposal_notes) <= 2000),
+  constraint allocation_requests_terms_version_len
+    check (
+      terms_version is null
+      or char_length(terms_version) between 1 and 40
+    )
 );
 
 comment on table public.allocation_requests is
@@ -147,6 +154,12 @@ comment on column public.allocation_requests.admin_notes is
 
 comment on column public.allocation_requests.proposal_notes is
   'Observações comerciais da proposta. Podem aparecer no PDF enviado ao cliente.';
+
+comment on column public.allocation_requests.terms_accepted_at is
+  'Momento em que o cliente aceitou os Termos e Condições no formulário público.';
+
+comment on column public.allocation_requests.terms_version is
+  'Versão/identificador dos Termos aceitos (ex.: 2026-09-06).';
 
 comment on column public.allocation_requests.total_value is
   'Total calculado no banco: service_value + additional_value - discount_value.';

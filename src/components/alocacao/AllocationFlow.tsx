@@ -7,6 +7,7 @@ import { ReviewStep } from "@/components/alocacao/ReviewStep";
 import { SuccessStep } from "@/components/alocacao/SuccessStep";
 import { INITIAL_CUSTOMER_FORM } from "@/constants/alocacao";
 import {
+  ALLOCATION_RATE_LIMIT_ERROR,
   ALLOCATION_SUBMIT_ERROR,
   submitAllocationRequest,
   toPublicAllocationPayload,
@@ -59,8 +60,12 @@ export function AllocationFlow() {
       setSubmittedAt(formatRequestDate(new Date(created.createdAt)));
       setStep(3);
       window.scrollTo({ top: 0, behavior: "auto" });
-    } catch {
-      setSubmitError(ALLOCATION_SUBMIT_ERROR);
+    } catch (error) {
+      const message =
+        error instanceof Error && error.message === "ALLOCATION_RATE_LIMITED"
+          ? ALLOCATION_RATE_LIMIT_ERROR
+          : ALLOCATION_SUBMIT_ERROR;
+      setSubmitError(message);
     } finally {
       submittingRef.current = false;
       setIsSubmitting(false);

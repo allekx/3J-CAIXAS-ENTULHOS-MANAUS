@@ -56,6 +56,8 @@ export type AllocationRequestRow = {
   discount_value: number;
   total_value: number;
   proposal_notes: string | null;
+  terms_accepted_at: string | null;
+  terms_version: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -87,6 +89,8 @@ export type AllocationRequestInsert = {
   discount_value?: number;
   total_value?: number;
   proposal_notes?: string | null;
+  terms_accepted_at?: string | null;
+  terms_version?: string | null;
   created_at?: string;
   updated_at?: string;
 };
@@ -104,6 +108,7 @@ export type PublicAllocationRequestPayload = {
   condominium: string;
   city: string;
   payment_method: PaymentMethod;
+  accepted_terms: true;
 };
 
 export type CreateAllocationRequestSuccess = {

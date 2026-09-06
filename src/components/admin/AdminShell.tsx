@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
@@ -13,6 +14,8 @@ import {
 import { signOutAdmin } from "@/lib/auth/actions";
 import { ROUTES, SITE } from "@/constants/site";
 import { cn } from "@/lib/utils/cn";
+
+const LOGO_SRC = "/logos/logo-3j-oficial.jpg";
 
 const NAV_ITEMS = [
   {
@@ -33,6 +36,47 @@ type AdminShellProps = {
   children: ReactNode;
   userEmail: string;
 };
+
+function AdminBrandMark({
+  sizeClassName,
+  priority = false,
+}: {
+  sizeClassName: string;
+  priority?: boolean;
+}) {
+  const [logoReady, setLogoReady] = useState(false);
+  const [logoMissing, setLogoMissing] = useState(false);
+
+  return (
+    <div className={cn("relative shrink-0", sizeClassName)}>
+      <div
+        className="absolute inset-[-2px] rounded-full bg-[conic-gradient(from_210deg,#c9a227,#f0d878,#a6851c,#c9a227)] opacity-90"
+        aria-hidden="true"
+      />
+      <div className="absolute inset-[2px] overflow-hidden rounded-full bg-brand-black ring-1 ring-brand-gold/40">
+        {!logoMissing ? (
+          <Image
+            src={LOGO_SRC}
+            alt={SITE.name}
+            width={160}
+            height={160}
+            priority={priority}
+            onLoad={() => setLogoReady(true)}
+            onError={() => setLogoMissing(true)}
+            className={cn(
+              "size-full object-cover",
+              !logoReady && "opacity-0",
+            )}
+          />
+        ) : (
+          <span className="flex size-full items-center justify-center px-1 text-[10px] font-bold tracking-wide text-white uppercase">
+            {SITE.shortName}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
 
 export function AdminShell({ children, userEmail }: AdminShellProps) {
   const pathname = usePathname();
@@ -63,9 +107,22 @@ export function AdminShell({ children, userEmail }: AdminShellProps) {
           menuOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <div className="border-b border-white/10 px-5 py-5">
-          <p className="text-sm font-semibold tracking-wide">{SITE.name}</p>
-          <p className="mt-1 text-xs text-zinc-400">Painel administrativo</p>
+        <div className="border-b border-white/10 border-t-2 border-t-brand-gold px-5 py-5">
+          <Link
+            href={ROUTES.admin}
+            onClick={() => setMenuOpen(false)}
+            className="flex items-center gap-3"
+          >
+            <AdminBrandMark sizeClassName="size-12" priority />
+            <span className="min-w-0">
+              <span className="block truncate text-sm font-semibold tracking-wide text-brand-gold">
+                {SITE.name}
+              </span>
+              <span className="mt-0.5 block text-xs text-zinc-400">
+                Painel administrativo
+              </span>
+            </span>
+          </Link>
         </div>
 
         <nav className="flex-1 px-3 py-4" aria-label="Menu administrativo">
@@ -113,12 +170,17 @@ export function AdminShell({ children, userEmail }: AdminShellProps) {
         </div>
       </aside>
 
-      <div className="lg:pl-64">
-        <header className="flex items-center justify-between border-b border-brand-border bg-white px-4 py-3 lg:hidden">
-          <p className="text-sm font-semibold">{SITE.name}</p>
+      <div className="min-w-0 lg:pl-64">
+        <header className="flex items-center justify-between border-b border-brand-border border-t-2 border-t-brand-gold bg-white px-4 py-3 lg:hidden">
+          <Link href={ROUTES.admin} className="flex min-w-0 items-center gap-2.5">
+            <AdminBrandMark sizeClassName="size-9" />
+            <span className="truncate text-sm font-semibold text-brand-gold">
+              {SITE.name}
+            </span>
+          </Link>
           <button
             type="button"
-            className="flex size-10 items-center justify-center border border-brand-border"
+            className="flex size-10 shrink-0 items-center justify-center border border-brand-border"
             aria-expanded={menuOpen}
             aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
             onClick={() => setMenuOpen((open) => !open)}
@@ -130,7 +192,7 @@ export function AdminShell({ children, userEmail }: AdminShellProps) {
             )}
           </button>
         </header>
-        <main className="px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+        <main className="min-w-0 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
       </div>
     </div>
   );

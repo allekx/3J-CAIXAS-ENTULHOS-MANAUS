@@ -41,6 +41,8 @@ Requisito: Node.js ≥ 20.9.0.
 | `NEXT_PUBLIC_YOUTUBE_URL` | Browser | YouTube na `/bio` (opcional) |
 | `NEXT_PUBLIC_COMPANY_PHONE` | Browser | Telefone no PDF da proposta (opcional; futuro) |
 | `NEXT_PUBLIC_COMPANY_EMAIL` | Browser | E-mail no PDF da proposta (opcional; futuro) |
+| `UPSTASH_REDIS_REST_URL` | **Somente servidor** | Rate limit da API pública (opcional; Upstash) |
+| `UPSTASH_REDIS_REST_TOKEN` | **Somente servidor** | Token Upstash Redis (opcional) |
 
 Padrões da `/bio` e links fixos (Google Maps, WhatsApp) estão em `src/constants/bio.ts`.
 
@@ -64,6 +66,8 @@ Abre em [http://localhost:3000](http://localhost:3000).
 | `/bio` | Link in bio — redes sociais e CTAs |
 | `/inicio` | Redireciona para `/` (legado do preview) |
 | `/confirmacao-alocacao` | Fluxo de solicitação de locação (3 etapas, CNPJ opcional) + WhatsApp na etapa final |
+| `/confirmacao-alocacao/termos` | Termos e Condições da locação |
+| `/confirmacao-alocacao/privacidade` | Política de Privacidade (LGPD) |
 | `/robots.txt` | Robots dinâmico |
 | `/sitemap.xml` | Sitemap dinâmico (prioriza `/`) |
 
@@ -139,6 +143,7 @@ npm start
    - `003_dashboard_operation_indexes.sql` — índices do dashboard
    - `004_customer_document.sql` — coluna `customer_document` (CNPJ opcional)
    - `005_cnpj_optional.sql` — constraint do CNPJ
+   - `006_terms_accepted.sql` — aceite dos Termos e Condições (`terms_accepted_at`, `terms_version`)
 3. Confirme RLS ativo nas tabelas `allocation_requests` e `allocation_protocol_counters`, sem políticas para `anon`/`authenticated`.
 4. Em Authentication:
    - desative o cadastro público (sign-ups);
@@ -147,6 +152,8 @@ npm start
 5. Copie URL, anon key e service role key para `.env.local` (local) e para a Vercel (produção).
 
 O protocolo (`3J-AAAA-000000`) é gerado no banco. O cliente nunca envia protocolo, status, valores ou observações internas.
+
+A API pública `POST /api/allocation-requests` tem rate limit de **5 tentativas por IP a cada 15 minutos**. Sem Upstash, o limite roda em memória do processo (suficiente em localhost). Em produção na Vercel, recomenda-se criar um **Upstash Redis** no Marketplace e cadastrar `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` como Config.
 
 Se o painel exibir erro ao abrir uma solicitação com mensagem sobre coluna inexistente, execute as migrations pendentes no **SQL Editor** do Supabase.
 

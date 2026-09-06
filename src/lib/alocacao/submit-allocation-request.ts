@@ -8,10 +8,13 @@ import type {
 export const ALLOCATION_SUBMIT_ERROR =
   "Não foi possível enviar sua solicitação. Tente novamente.";
 
+export const ALLOCATION_RATE_LIMIT_ERROR =
+  "Muitas tentativas em pouco tempo. Aguarde alguns minutos e tente novamente.";
+
 export function toPublicAllocationPayload(
   data: CustomerFormData,
 ): PublicAllocationRequestPayload | null {
-  if (!data.paymentMethod) {
+  if (!data.paymentMethod || !data.acceptedTerms) {
     return null;
   }
 
@@ -26,6 +29,7 @@ export function toPublicAllocationPayload(
     condominium: data.condominium,
     city: data.city,
     payment_method: data.paymentMethod,
+    accepted_terms: true,
   };
 }
 
@@ -64,6 +68,10 @@ export async function submitAllocationRequest(
     body = await response.json();
   } catch {
     throw new Error("ALLOCATION_SUBMIT_FAILED");
+  }
+
+  if (response.status === 429) {
+    throw new Error("ALLOCATION_RATE_LIMITED");
   }
 
   if (!response.ok || !isCreateSuccess(body)) {

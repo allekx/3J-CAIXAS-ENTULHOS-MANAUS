@@ -32,6 +32,8 @@ export type ForwardRequestMessageInput = {
   pickup_date: string | null;
   payment_method: string;
   status: AllocationRequestStatus;
+  terms_accepted_at?: string | null;
+  terms_version?: string | null;
 };
 
 function display(value: string | number | null | undefined) {
@@ -73,6 +75,30 @@ function displayDate(value: string | null | undefined) {
   return formatIsoDatePtBr(raw);
 }
 
+function displayTermsAcceptance(
+  acceptedAt: string | null | undefined,
+  version: string | null | undefined,
+) {
+  const raw = (acceptedAt ?? "").trim();
+
+  if (raw.length === 0) {
+    return "Não registrado";
+  }
+
+  const when = new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(raw));
+
+  const versionLabel = (version ?? "").trim();
+  return versionLabel.length > 0
+    ? `Aceito em ${when} (versão ${versionLabel})`
+    : `Aceito em ${when}`;
+}
+
 export function buildForwardRequestMessage(input: ForwardRequestMessageInput) {
   const lines = [
     `Nova solicitação - ${SITE.name}`,
@@ -103,6 +129,9 @@ export function buildForwardRequestMessage(input: ForwardRequestMessageInput) {
     "",
     "Forma de pagamento:",
     display(input.payment_method),
+    "",
+    "Termos e Condições:",
+    displayTermsAcceptance(input.terms_accepted_at, input.terms_version),
     "",
     "Status:",
     display(ALLOCATION_STATUS_LABELS[input.status] ?? input.status),

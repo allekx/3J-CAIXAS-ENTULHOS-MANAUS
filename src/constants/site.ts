@@ -9,6 +9,8 @@ export const ROUTES = {
   home: "/",
   bio: "/bio",
   confirmacaoAlocacao: "/confirmacao-alocacao",
+  termosLocacao: "/confirmacao-alocacao/termos",
+  privacidade: "/confirmacao-alocacao/privacidade",
   admin: "/admin",
   adminLogin: "/admin/login",
   adminSolicitacoes: "/admin/solicitacoes",

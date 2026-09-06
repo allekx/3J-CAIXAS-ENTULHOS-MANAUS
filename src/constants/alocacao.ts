@@ -1,4 +1,5 @@
 import type { CustomerFormData } from "@/types/alocacao";
+import { ROUTES } from "@/constants/site";
 import { onlyDigits } from "@/lib/utils/phone";
 
 export const INITIAL_CUSTOMER_FORM: CustomerFormData = {
@@ -15,7 +16,7 @@ export const INITIAL_CUSTOMER_FORM: CustomerFormData = {
   acceptedTerms: false,
 };
 
-export const PRIVACY_HREF = "#politica-de-privacidade";
+export const PRIVACY_HREF = ROUTES.privacidade;
 
 export const COLLECTOR_BOX_DEFAULTS = {
   boxType: "Caixa coletora de entulho",

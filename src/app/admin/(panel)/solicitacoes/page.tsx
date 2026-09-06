@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { RequestsFilters, RequestsTable } from "@/components/admin/RequestsTable";
+import { RequestsFilters } from "@/components/admin/RequestsFilters";
+import { RequestsTable } from "@/components/admin/RequestsTable";
 import {
   listAllocationRequests,
   parseListFilters,
@@ -24,7 +25,7 @@ export default async function AdminSolicitacoesPage({ searchParams }: PageProps)
   const requests = await listAllocationRequests(filters);
 
   return (
-    <div className="mx-auto max-w-6xl">
+    <div className="mx-auto min-w-0 max-w-6xl">
       <h1 className="text-2xl font-semibold tracking-tight text-brand-black">
         Solicitações
       </h1>
@@ -32,7 +33,7 @@ export default async function AdminSolicitacoesPage({ searchParams }: PageProps)
         Central de atendimento das solicitações de locação.
       </p>
 
-      <div className="mt-6">
+      <div className="mt-6 min-w-0">
         <RequestsFilters
           query={params.q ?? ""}
           status={filters.status ?? ""}
@@ -41,7 +42,7 @@ export default async function AdminSolicitacoesPage({ searchParams }: PageProps)
         />
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 min-w-0">
         <RequestsTable
           requests={requests}
           emptyLabel="Nenhuma solicitação encontrada para os filtros informados."

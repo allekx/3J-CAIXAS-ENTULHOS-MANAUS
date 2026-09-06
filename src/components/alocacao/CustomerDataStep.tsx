@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { Info } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Field, SelectInput, TextInput } from "@/components/ui/Field";
 import { WHATSAPP_LOCATION_INFO } from "@/constants/alocacao";
+import { ROUTES } from "@/constants/site";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import type { CustomerFormData } from "@/types/alocacao";
 import { getCustomerFormErrors } from "@/lib/utils/alocacao";
@@ -259,7 +261,18 @@ export function CustomerDataStep({
                 errors.acceptedTerms && "outline outline-1 outline-red-700",
               )}
             />
-            <span>Li e aceito os Termos e Condições.</span>
+            <span>
+              Li e aceito os{" "}
+              <Link
+                href={ROUTES.termosLocacao}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-brand-black underline decoration-brand-gold/70 underline-offset-2 hover:decoration-brand-gold"
+              >
+                Termos e Condições
+              </Link>
+              .
+            </span>
           </label>
           {errors.acceptedTerms ? (
             <p

@@ -346,7 +346,28 @@ function mapAllocationRequestRow(row: AllocationRequestRow): AllocationRequestRo
     additional_value: toMoney(row.additional_value),
     discount_value: toMoney(row.discount_value),
     total_value: toMoney(row.total_value),
+    terms_accepted_at: row.terms_accepted_at ?? null,
+    terms_version: row.terms_version ?? null,
   };
+}
+
+const ALLOCATION_REQUEST_DETAIL_SELECT =
+  "id, protocol, status, customer_name, customer_phone, customer_document, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at, terms_accepted_at, terms_version";
+
+const ALLOCATION_REQUEST_DETAIL_SELECT_LEGACY =
+  "id, protocol, status, customer_name, customer_phone, customer_document, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at";
+
+function isMissingTermsColumnError(error: {
+  code?: string;
+  message?: string;
+} | null) {
+  if (!error) return false;
+  const message = (error.message ?? "").toLowerCase();
+  return (
+    error.code === "42703" ||
+    message.includes("terms_accepted_at") ||
+    message.includes("terms_version")
+  );
 }
 
 export async function getAllocationRequestById(
@@ -355,17 +376,32 @@ export async function getAllocationRequestById(
   await requireAdminUser();
   const supabase = createSupabaseAdminClient();
 
-  const { data, error } = await withAdminQueryRetry(
+  let result = await withAdminQueryRetry(
     () =>
       supabase
         .from("allocation_requests")
-        .select(
-          "id, protocol, status, customer_name, customer_phone, customer_document, street, address_number, complement, neighborhood, condominium, city, payment_method, box_type, box_size, quantity, rental_days, delivery_date, pickup_date, admin_notes, assigned_to, service_value, additional_value, discount_value, total_value, proposal_notes, created_at, updated_at",
-        )
+        .select(ALLOCATION_REQUEST_DETAIL_SELECT)
         .eq("id", id)
         .maybeSingle(),
     "getAllocationRequestById",
   );
+
+  if (isMissingTermsColumnError(result.error)) {
+    console.warn(
+      "[admin] Colunas de termos ausentes. Execute supabase/migrations/006_terms_accepted.sql. Usando select legado.",
+    );
+    result = await withAdminQueryRetry(
+      () =>
+        supabase
+          .from("allocation_requests")
+          .select(ALLOCATION_REQUEST_DETAIL_SELECT_LEGACY)
+          .eq("id", id)
+          .maybeSingle(),
+      "getAllocationRequestById:legacy",
+    );
+  }
+
+  const { data, error } = result;
 
   if (error) {
     console.error("[admin] Falha ao carregar solicitação.", {
@@ -377,7 +413,21 @@ export async function getAllocationRequestById(
     throw new Error("ADMIN_DETAIL_FAILED");
   }
 
-  return data ? mapAllocationRequestRow(data) : null;
+  if (!data) {
+    return null;
+  }
+
+  return mapAllocationRequestRow({
+    ...(data as AllocationRequestRow),
+    terms_accepted_at:
+      "terms_accepted_at" in data
+        ? ((data as AllocationRequestRow).terms_accepted_at ?? null)
+        : null,
+    terms_version:
+      "terms_version" in data
+        ? ((data as AllocationRequestRow).terms_version ?? null)
+        : null,
+  });
 }
 
 export async function updateAllocationRequest(id: string, input: unknown) {

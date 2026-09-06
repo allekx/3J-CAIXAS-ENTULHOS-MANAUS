@@ -11,7 +11,7 @@ import { updateAllocationRequestAction } from "@/app/admin/(panel)/solicitacoes/
 import { ALLOCATION_STATUS_LABELS } from "@/constants/allocation-status";
 import { ADMIN_PROPOSAL_PDF_ENABLED } from "@/constants/admin";
 import { COLLECTOR_BOX_DEFAULTS } from "@/constants/alocacao";
-import { adminSolicitacaoPropostaPath } from "@/constants/site";
+import { adminSolicitacaoPropostaPath, ROUTES } from "@/constants/site";
 import { PAYMENT_METHODS } from "@/types/alocacao";
 import { ALLOCATION_STATUSES } from "@/types/allocation-request";
 import type {
@@ -293,6 +293,8 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
     pickup_date: form.pickup_date,
     payment_method: form.payment_method,
     status: form.status,
+    terms_accepted_at: request.terms_accepted_at,
+    terms_version: request.terms_version,
   });
 
   return (
@@ -489,6 +491,41 @@ export function RequestEditForm({ request }: RequestEditFormProps) {
             <p className="mt-2 text-sm text-brand-black sm:text-base">
               {formatRequestDate(new Date(request.created_at))}
             </p>
+          </div>
+          <div className="sm:col-span-2">
+            <p className="text-xs font-medium tracking-wide text-brand-muted uppercase">
+              Termos e Condições
+            </p>
+            {request.terms_accepted_at ? (
+              <div className="mt-2 rounded-md border border-emerald-200 bg-emerald-50 px-3 py-3 text-sm text-brand-black">
+                <p className="font-semibold text-emerald-900">
+                  Aceite registrado
+                </p>
+                <p className="mt-1 text-emerald-900/90">
+                  O cliente aceitou os Termos e Condições em{" "}
+                  {formatRequestDate(new Date(request.terms_accepted_at))}
+                  {request.terms_version
+                    ? ` (versão ${request.terms_version})`
+                    : ""}
+                  .
+                </p>
+                <p className="mt-2">
+                  <a
+                    href={ROUTES.termosLocacao}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-brand-black underline-offset-2 hover:underline"
+                  >
+                    Ver Termos e Condições
+                  </a>
+                </p>
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-brand-muted">
+                Aceite não registrado nesta solicitação (registro anterior à
+                exigência de termos ou migração pendente).
+              </p>
+            )}
           </div>
           <Field id="status" label="Status" required error={fieldErrors.status}>
             <select
