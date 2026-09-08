@@ -8,10 +8,48 @@ import { ROUTES } from "@/constants/site";
 import { getSiteUrl } from "@/lib/seo/site-url";
 
 const LOCAL_BUSINESS_ID = "#local-business";
+const ORGANIZATION_ID = "#organization";
+const WEBSITE_ID = "#website";
 
 export function buildHomeStructuredData() {
   const siteUrl = getSiteUrl();
-  const businessId = `${siteUrl}${LOCAL_BUSINESS_ID}`;
+  const businessId = `${siteUrl}/${LOCAL_BUSINESS_ID}`;
+  const organizationId = `${siteUrl}/${ORGANIZATION_ID}`;
+  const websiteId = `${siteUrl}/${WEBSITE_ID}`;
+  const logoUrl = `${siteUrl}/logos/logo-3j-oficial.jpg`;
+  const ogImageUrl = `${siteUrl}${HOME_IMAGES.og.src}`;
+
+  const logo = {
+    "@type": "ImageObject",
+    url: logoUrl,
+    contentUrl: logoUrl,
+    width: 1024,
+    height: 1024,
+    caption: HOME_COMPANY.commercialName,
+  };
+
+  const primaryImage = {
+    "@type": "ImageObject",
+    url: ogImageUrl,
+    contentUrl: ogImageUrl,
+    width: HOME_IMAGES.og.width,
+    height: HOME_IMAGES.og.height,
+    caption: HOME_IMAGES.og.alt,
+  };
+
+  const organization = {
+    "@type": "Organization",
+    "@id": organizationId,
+    name: HOME_COMPANY.commercialName,
+    legalName: HOME_COMPANY.legalName,
+    alternateName: [HOME_COMPANY.shortName, "3J"],
+    url: siteUrl,
+    logo,
+    image: primaryImage,
+    email: HOME_COMPANY.email,
+    telephone: "+55 92 98594-6242",
+    sameAs: [HOME_COMPANY.instagramUrl, "https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8"],
+  };
 
   const localBusiness = {
     "@type": "LocalBusiness",
@@ -19,8 +57,8 @@ export function buildHomeStructuredData() {
     name: HOME_COMPANY.commercialName,
     legalName: HOME_COMPANY.legalName,
     description: HOME_METADATA.description,
-    image: `${siteUrl}${HOME_IMAGES.hero.src}`,
-    logo: `${siteUrl}/logos/logo-3j-oficial.jpg`,
+    image: [ogImageUrl, logoUrl],
+    logo,
     telephone: "+55 92 98594-6242",
     email: HOME_COMPANY.email,
     url: siteUrl,
@@ -47,17 +85,7 @@ export function buildHomeStructuredData() {
       },
     },
     sameAs: [HOME_COMPANY.instagramUrl, "https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8"],
-  };
-
-  const organization = {
-    "@type": "Organization",
-    "@id": `${siteUrl}/#organization`,
-    name: HOME_COMPANY.commercialName,
-    url: siteUrl,
-    logo: `${siteUrl}/logos/logo-3j-oficial.jpg`,
-    email: HOME_COMPANY.email,
-    telephone: "+55 92 98594-6242",
-    sameAs: [HOME_COMPANY.instagramUrl],
+    parentOrganization: { "@id": organizationId },
   };
 
   const service = {
@@ -81,11 +109,26 @@ export function buildHomeStructuredData() {
 
   const website = {
     "@type": "WebSite",
-    "@id": `${siteUrl}/#website`,
+    "@id": websiteId,
     name: HOME_COMPANY.commercialName,
+    alternateName: [HOME_COMPANY.shortName, "3J"],
     url: siteUrl,
     inLanguage: "pt-BR",
-    publisher: { "@id": `${siteUrl}/#organization` },
+    description: HOME_METADATA.description,
+    publisher: { "@id": organizationId },
+    image: primaryImage,
+  };
+
+  const webPage = {
+    "@type": "WebPage",
+    "@id": `${siteUrl}/#webpage`,
+    url: siteUrl,
+    name: HOME_METADATA.title,
+    description: HOME_METADATA.description,
+    isPartOf: { "@id": websiteId },
+    about: { "@id": businessId },
+    primaryImageOfPage: primaryImage,
+    inLanguage: "pt-BR",
   };
 
   const faqPage = {
@@ -103,6 +146,13 @@ export function buildHomeStructuredData() {
 
   return {
     "@context": "https://schema.org",
-    "@graph": [organization, localBusiness, service, website, faqPage],
+    "@graph": [
+      organization,
+      localBusiness,
+      service,
+      website,
+      webPage,
+      faqPage,
+    ],
   };
 }

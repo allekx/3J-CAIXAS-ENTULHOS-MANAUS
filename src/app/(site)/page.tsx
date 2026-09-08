@@ -13,7 +13,11 @@ import { ServiceGallery } from "@/components/home/ServiceGallery";
 import { ServiceSection } from "@/components/home/ServiceSection";
 import { TrustBar } from "@/components/home/TrustBar";
 import { WhatsAppButton } from "@/components/home/WhatsAppButton";
-import { HOME_IMAGES, HOME_METADATA } from "@/constants/home";
+import {
+  HOME_COMPANY,
+  HOME_IMAGES,
+  HOME_METADATA,
+} from "@/constants/home";
 import { ROUTES } from "@/constants/site";
 import { getSiteUrl } from "@/lib/seo/site-url";
 
@@ -41,13 +45,13 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     type: "website",
     url: ROUTES.home,
-    siteName: "3J Caixas Entulhos Manaus",
+    siteName: HOME_COMPANY.commercialName,
     images: [
       {
-        url: HOME_IMAGES.hero.src,
-        width: HOME_IMAGES.hero.width,
-        height: HOME_IMAGES.hero.height,
-        alt: HOME_IMAGES.hero.alt,
+        url: HOME_IMAGES.og.src,
+        width: HOME_IMAGES.og.width,
+        height: HOME_IMAGES.og.height,
+        alt: HOME_IMAGES.og.alt,
       },
     ],
   },
@@ -55,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: HOME_METADATA.title,
     description: HOME_METADATA.description,
-    images: [HOME_IMAGES.hero.src],
+    images: [HOME_IMAGES.og.src],
   },
 };
 

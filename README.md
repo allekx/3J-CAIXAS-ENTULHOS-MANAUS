@@ -2,7 +2,7 @@
 
 Sistema web da **3J Caixas Entulhos Manaus** para locação de caixas coletoras de entulho (6 m³) em Manaus – AM.
 
-Produção: [https://3-j-caixas-entulhos-manaus.vercel.app](https://3-j-caixas-entulhos-manaus.vercel.app)
+Produção: [https://www.3jcaixasentulhosmanaus.com](https://www.3jcaixasentulhosmanaus.com)
 
 ## Visão geral
 
@@ -147,9 +147,18 @@ supabase/
 
 ## SEO
 
-A landing em `/` é a entrada indexável principal (metadados, JSON-LD `LocalBusiness`, Open Graph). O JSON-LD inclui endereço, CEP, coordenadas e o link do Google Maps. O sitemap inclui `/`, locação, termos, privacidade e `/bio`.
+A landing em `/` é a entrada indexável principal (metadados, JSON-LD `Organization` / `LocalBusiness` / `WebSite` / `WebPage`, Open Graph).
 
-Após o deploy, configure o domínio em `NEXT_PUBLIC_SITE_URL` e submeta o sitemap no Google Search Console.
+Para o Google Search mostrar **nome da empresa**, **favicon** e **miniatura**:
+
+- `NEXT_PUBLIC_SITE_URL` deve ser o domínio canônico em produção (ex.: `https://www.3jcaixasentulhosmanaus.com`).
+- Favicons em `/icons/icon-48.png` (e 96/192/512) + logo em `public/logos/`.
+- Imagem social `og:image` em `/images/3j/og-share.jpg` (1200×630).
+- Schema com `name: "3J Caixas Entulhos Manaus"` e `logo` / `primaryImageOfPage`.
+
+O Google pode levar dias para atualizar o resultado. Após o deploy: Google Search Console → solicitar indexação da home e, se disponível, definir o **nome do site**.
+
+O sitemap inclui `/`, locação, termos, privacidade e `/bio`.
 
 ## Build e produção
 
@@ -204,7 +213,7 @@ Valores atuais esperados em produção:
 
 | Variável | Valor |
 | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | `https://3-j-caixas-entulhos-manaus.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | domínio canônico (ex.: `https://www.3jcaixasentulhosmanaus.com`) |
 | `NEXT_PUBLIC_COMPANY_WHATSAPP` | `5592985946242` |
 
 Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
@@ -214,6 +223,7 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 - Landing (`/`) — mapa oficial, CTAs (solicitação, WhatsApp, Instagram) no hero e no rodapé
 - Bio (`/bio`) — “Ir para o site” → `/`; mapa e Instagram/YouTube
 - Locação — exemplos “não permitido” (paredão), Termos, Privacidade e WhatsApp na etapa final
+- SEO — favicon da logo, nome “3J Caixas Entulhos Manaus”, preview `og-share.jpg`; solicitar reindexação no Search Console
 - Login admin, dashboard, lista/filtros, detalhe com aceite dos termos e encaminhamento WhatsApp
 - Rate limit (opcional: confirmar Upstash em produção)
 
@@ -232,4 +242,4 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 | Instagram | [@3_j_caixas_entulhos_manaus](https://www.instagram.com/3_j_caixas_entulhos_manaus) |
 | Endereço | Estrada do Tarumã – Tarumã, Manaus – AM, CEP 69041-650 |
 | Google Maps | [Perfil oficial 3J CAIXAS ENTULHOS MANAUS](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8) |
-| Produção | https://3-j-caixas-entulhos-manaus.vercel.app |
+| Produção | https://www.3jcaixasentulhosmanaus.com |

@@ -1,8 +1,8 @@
 export const SITE = {
-  name: "3J Caixas Entulhos",
+  name: "3J Caixas Entulhos Manaus",
   shortName: "3J",
   description:
-    "Sistema de solicitação de locação de caixas coletoras de entulho.",
+    "Caixa coletora de entulho de 6 m³ em Manaus para obras, reformas e limpezas. Solicite a locação com a 3J Caixas Entulhos Manaus.",
 } as const;
 
 export const ROUTES = {

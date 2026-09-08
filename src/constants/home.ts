@@ -33,6 +33,13 @@ export const HOME_COMPANY = {
 } as const;
 
 export const HOME_IMAGES = {
+  /** Imagem de compartilhamento / preview no Google (1200×630). */
+  og: {
+    src: "/images/3j/og-share.jpg",
+    width: 1200,
+    height: 630,
+    alt: "Caixa coletora de entulho da 3J Caixas Entulhos Manaus em obra",
+  },
   hero: {
     src: "/images/3j/3j-caixa-coletora-azul-manaus.jpg",
     width: 509,
