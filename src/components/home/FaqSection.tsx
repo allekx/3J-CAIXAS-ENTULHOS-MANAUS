@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import { BrandText } from "@/components/home/BrandText";
 import { HOME_CTA, HOME_FAQ } from "@/constants/home";
 import { HomeReveal } from "@/components/home/HomeReveal";
 import { HomeSection } from "@/components/home/HomeSection";
@@ -41,7 +42,7 @@ export function FaqSection() {
                   }
                 >
                   <span className="text-base font-semibold text-landing-black sm:text-lg">
-                    {item.question}
+                    <BrandText>{item.question}</BrandText>
                   </span>
                   <ChevronDown
                     aria-hidden="true"
@@ -71,7 +72,7 @@ export function FaqSection() {
                       ou entrar em contato pelo WhatsApp.
                     </>
                   ) : (
-                    item.answer
+                    <BrandText>{item.answer}</BrandText>
                   )}
                 </div>
               </div>

@@ -1,3 +1,4 @@
+import { BrandText } from "@/components/home/BrandText";
 import { cn } from "@/lib/utils/cn";
 
 type SectionHeadingProps = {
@@ -17,6 +18,8 @@ export function SectionHeading({
   light = false,
   className,
 }: SectionHeadingProps) {
+  const brandTone = light ? "onDark" : "onLight";
+
   return (
     <div
       className={cn(
@@ -36,7 +39,7 @@ export function SectionHeading({
           light ? "text-white" : "text-landing-black",
         )}
       >
-        {title}
+        <BrandText tone={brandTone}>{title}</BrandText>
       </h2>
       <span
         aria-hidden="true"
@@ -53,7 +56,7 @@ export function SectionHeading({
             light ? "text-zinc-400" : "text-landing-muted",
           )}
         >
-          {description}
+          <BrandText tone={brandTone}>{description}</BrandText>
         </p>
       ) : null}
     </div>

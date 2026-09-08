@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandText } from "@/components/home/BrandText";
 import { GOOGLE_MAPS_PLACE_URL } from "@/constants/bio";
 import { HomeReveal } from "@/components/home/HomeReveal";
 import {
@@ -30,7 +31,7 @@ export function Footer() {
                 </dt>
                 <dd className="mt-1 text-zinc-300">
                   {HOME_COMPANY.legalName}
-                  <span className="mt-0.5 block text-zinc-500">
+                  <span className="mt-0.5 block font-semibold text-landing-gold">
                     ({HOME_COMPANY.commercialName.toUpperCase()})
                   </span>
                 </dd>
@@ -70,7 +71,7 @@ export function Footer() {
                 href={GOOGLE_MAPS_PLACE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-zinc-300 transition-colors hover:text-white"
+                className="font-semibold text-landing-gold transition-colors hover:text-brand-gold"
               >
                 {HOME_COMPANY.googleProfile}
               </a>
@@ -158,8 +159,9 @@ export function Footer() {
             {HOME_COMPANY.address.city} – {HOME_COMPANY.address.state}
           </p>
           <p>
-            © {year} {HOME_COMPANY.commercialName}. Todos os direitos
-            reservados.
+            © {year}{" "}
+            <BrandText tone="onDark">{HOME_COMPANY.commercialName}</BrandText>.
+            Todos os direitos reservados.
           </p>
           <p>
             <Link

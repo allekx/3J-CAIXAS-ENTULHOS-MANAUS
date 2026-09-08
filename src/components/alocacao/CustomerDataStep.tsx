@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { Info } from "lucide-react";
+import { ForbiddenUsageExamples } from "@/components/alocacao/ForbiddenUsageExamples";
 import { Button } from "@/components/ui/Button";
 import { Field, SelectInput, TextInput } from "@/components/ui/Field";
 import { WHATSAPP_LOCATION_INFO } from "@/constants/alocacao";
@@ -240,6 +241,10 @@ export function CustomerDataStep({
               />
             </Field>
           </div>
+        </div>
+
+        <div className="mt-5">
+          <ForbiddenUsageExamples />
         </div>
 
         <div className="mt-5">

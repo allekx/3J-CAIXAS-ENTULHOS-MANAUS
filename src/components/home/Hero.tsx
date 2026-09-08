@@ -1,3 +1,4 @@
+import { BrandText } from "@/components/home/BrandText";
 import { HomeImage } from "@/components/home/HomeImage";
 import { HomeReveal } from "@/components/home/HomeReveal";
 import {
@@ -40,10 +41,12 @@ export function Hero() {
 
           <HomeReveal immediate delay={160}>
             <p className="mt-5 max-w-lg text-[15px] leading-7 text-zinc-400 sm:text-base">
-              Seja bem-vindo(a) à 3J Caixas Entulhos Manaus – empresa séria e
-              devidamente regularizada, com CNPJ 64.160.751/0001-58. Atuamos com
-              compromisso, respeito a você cliente e às normas, segurança,
-              transparência e total confiança em cada serviço prestado.
+              <BrandText tone="onDark">
+                Seja bem-vindo(a) à 3J Caixas Entulhos Manaus – empresa séria e
+                devidamente regularizada, com CNPJ 64.160.751/0001-58. Atuamos
+                com compromisso, respeito a você cliente e às normas, segurança,
+                transparência e total confiança em cada serviço prestado.
+              </BrandText>
             </p>
           </HomeReveal>
 

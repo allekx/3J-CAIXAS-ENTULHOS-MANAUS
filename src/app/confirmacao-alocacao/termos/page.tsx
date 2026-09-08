@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { AllocationHeader } from "@/components/alocacao/AllocationHeader";
+import { ForbiddenUsageExamples } from "@/components/alocacao/ForbiddenUsageExamples";
 import { ALLOCATION_TERMS } from "@/constants/termos-locacao";
 import { ROUTES } from "@/constants/site";
 
@@ -50,6 +51,12 @@ export default function TermosLocacaoPage() {
                 <p className="mt-2 text-sm leading-7 text-brand-muted sm:text-[15px]">
                   {item.description}
                 </p>
+                {index === 0 ? (
+                  <ForbiddenUsageExamples
+                    className="mt-5"
+                    density="comfortable"
+                  />
+                ) : null}
               </li>
             ))}
           </ol>

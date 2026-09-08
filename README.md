@@ -54,7 +54,7 @@ Requisito: Node.js ≥ 20.9.0.
 | `UPSTASH_REDIS_REST_URL` | **Somente servidor** | Rate limit da API pública (opcional; Upstash) |
 | `UPSTASH_REDIS_REST_TOKEN` | **Somente servidor** | Token Upstash Redis (opcional) |
 
-Padrões da `/bio` e links fixos (Google Maps, WhatsApp) estão em `src/constants/bio.ts`.
+Padrões da `/bio` e WhatsApp estão em `src/constants/bio.ts`. Endereço e mapa da landing (`HOME_COMPANY`, `HOME_MAPS`) estão em `src/constants/home.ts`. O perfil oficial no Google Maps é o mesmo em ambos: [maps.app.goo.gl/K4KQGPyK1nJ5nfpp8](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8).
 
 O número de WhatsApp oficial é **+55 92 98594-6242** (`5592985946242`). Usado na landing, na bio e no botão **Falar pelo WhatsApp** da etapa final de `/confirmacao-alocacao`.
 
@@ -141,7 +141,7 @@ supabase/
 
 ## SEO
 
-A landing em `/` é a entrada indexável principal (metadados, JSON-LD, Open Graph). O sitemap inclui `/`, locação, termos, privacidade e `/bio`.
+A landing em `/` é a entrada indexável principal (metadados, JSON-LD `LocalBusiness`, Open Graph). O JSON-LD inclui endereço, CEP, coordenadas e o link do Google Maps. O sitemap inclui `/`, locação, termos, privacidade e `/bio`.
 
 Após o deploy, configure o domínio em `NEXT_PUBLIC_SITE_URL` e submeta o sitemap no Google Search Console.
 
@@ -205,8 +205,8 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 
 ### Checklist pós-deploy
 
-- Landing (`/`)
-- Bio (`/bio`)
+- Landing (`/`) — mapa embutido no perfil oficial da empresa
+- Bio (`/bio`) — mapa e link do Google Maps
 - Locação (com e sem CNPJ), Termos, Privacidade e WhatsApp na etapa final
 - Login admin, dashboard, lista/filtros, detalhe com aceite dos termos e encaminhamento WhatsApp
 - Rate limit (opcional: confirmar Upstash em produção)
@@ -223,6 +223,7 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 | Permanência padrão | 3 dias úteis |
 | Telefone / WhatsApp | (92) 98594-6242 (`5592985946242`) |
 | E-mail | jadaildodasilvagomes@gmail.com |
-| Instagram | @3JCAIXASENTULHOSMANAUS |
-| Localização | Estrada do Tarumã – Tarumã, Manaus – AM ([Maps](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8)) |
+| Instagram | [@3JCAIXASENTULHOSMANAUS](https://www.instagram.com/3JCAIXASENTULHOSMANAUS) |
+| Endereço | Estrada do Tarumã – Tarumã, Manaus – AM, CEP 69041-650 |
+| Google Maps | [Perfil oficial 3J CAIXAS ENTULHOS MANAUS](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8) |
 | Produção | https://3-j-caixas-entulhos-manaus.vercel.app |

@@ -51,12 +51,6 @@ export const HOME_IMAGES = {
     height: 475,
     alt: "Caixa coletora azul da 3J Caixas Entulhos em área urbana de Manaus",
   },
-  obrasDupla: {
-    src: "/images/3j/3j-caixas-obras-manaus-01.png",
-    width: 497,
-    height: 285,
-    alt: "Caixas coletoras da 3J em obra com areia e materiais em Manaus",
-  },
   obraCaminhao: {
     src: "/images/3j/3j-caixas-obras-manaus-02.png",
     width: 844,
@@ -64,10 +58,16 @@ export const HOME_IMAGES = {
     alt: "Caixa coletora azul da 3J com caminhão de entrega em Manaus",
   },
   obraAmarela: {
-    src: "/images/3j/3j-caixas-obras-manaus-03.png",
-    width: 540,
-    height: 960,
-    alt: "Caixa coletora amarela da 3J cheia de entulho em obra urbana de Manaus",
+    src: "/images/3j/3j-caixas-obras-manaus-04.jpg",
+    width: 768,
+    height: 1024,
+    alt: "Caminhão da 3J transportando caixa coletora azul cheia de entulho em Manaus",
+  },
+  obraNoturna: {
+    src: "/images/3j/3j-caixas-obras-manaus-05.jpg",
+    width: 576,
+    height: 1024,
+    alt: "Caixa coletora azul da 3J cheia de entulho em calçada urbana de Manaus à noite",
   },
 } as const;
 
@@ -169,16 +169,16 @@ export const HOME_GALLERY = [
     caption: "Atendimento em área urbana de Manaus",
   },
   {
-    ...HOME_IMAGES.obrasDupla,
-    caption: "Caixas coletoras em obra residencial",
-  },
-  {
     ...HOME_IMAGES.obraCaminhao,
     caption: "Entrega e retirada com caminhão da 3J",
   },
   {
     ...HOME_IMAGES.obraAmarela,
-    caption: "Caixa coletora em uso em área urbana de Manaus",
+    caption: "Transporte e retirada da caixa coletora em Manaus",
+  },
+  {
+    ...HOME_IMAGES.obraNoturna,
+    caption: "Caixa coletora em uso na área urbana de Manaus",
   },
 ] as const;
 

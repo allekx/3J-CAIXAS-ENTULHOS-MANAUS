@@ -33,3 +33,28 @@ export const ALLOCATION_TERMS = {
     },
   ],
 } as const;
+
+/** Exemplos visuais de uso proibido da caixa (exibidos na solicitação e nos Termos). */
+export const FORBIDDEN_USAGE_EXAMPLES = [
+  {
+    id: "paredao",
+    badge: "Não é permitido",
+    title: "Fazer paredão",
+    description:
+      "Não use tábuas, madeira ou outros materiais para aumentar a altura da caixa e carregar além da borda. Isso dificulta a retirada e é inseguro.",
+    images: [
+      {
+        src: "/images/3j/3j-nao-permitido-paredao-01.jpg",
+        width: 768,
+        height: 1024,
+        alt: "Exemplo proibido: caixa coletora com paredão de madeira e entulho acima da borda",
+      },
+      {
+        src: "/images/3j/3j-nao-permitido-paredao-02.jpg",
+        width: 768,
+        height: 1024,
+        alt: "Exemplo proibido: instalação de paredão com tábuas para sobrecarregar a caixa coletora",
+      },
+    ],
+  },
+] as const;

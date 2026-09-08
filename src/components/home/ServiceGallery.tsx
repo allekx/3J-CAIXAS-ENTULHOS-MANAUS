@@ -1,4 +1,5 @@
 import { HOME_GALLERY } from "@/constants/home";
+import { BrandText } from "@/components/home/BrandText";
 import { HomeImage } from "@/components/home/HomeImage";
 import { HomeReveal } from "@/components/home/HomeReveal";
 import { HomeSection } from "@/components/home/HomeSection";
@@ -28,7 +29,7 @@ export function ServiceGallery() {
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             />
             <figcaption className="mt-3 text-sm text-landing-muted transition-colors duration-300 group-hover:text-landing-black">
-              {item.caption}
+              <BrandText>{item.caption}</BrandText>
             </figcaption>
           </HomeReveal>
         ))}
