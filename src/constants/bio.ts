@@ -1,8 +1,8 @@
 import { HOME_COMPANY } from "@/constants/home";
 import { ROUTES } from "@/constants/site";
 
-/** Site institucional da 3J — SimDif */
-export const BIO_WEBSITE_DEFAULT_URL = "https://3jcaixasentulhomanaus.simdif.com/";
+/** Site institucional — padrão: landing principal (`/`). Override via env se necessário. */
+export const BIO_WEBSITE_DEFAULT_URL = ROUTES.home;
 
 export const BIO_WEBSITE_URL =
   process.env.NEXT_PUBLIC_BIO_WEBSITE_URL?.trim() || BIO_WEBSITE_DEFAULT_URL;

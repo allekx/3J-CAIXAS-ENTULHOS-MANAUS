@@ -2,6 +2,7 @@ import { BrandText } from "@/components/home/BrandText";
 import { HomeImage } from "@/components/home/HomeImage";
 import { HomeReveal } from "@/components/home/HomeReveal";
 import {
+  HOME_COMPANY,
   HOME_CTA,
   HOME_HERO_TRUST,
   HOME_IMAGES,
@@ -65,7 +66,7 @@ export function Hero() {
           </HomeReveal>
 
           <HomeReveal immediate delay={320}>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
               <HomeLinkButton href={HOME_CTA.href} className="sm:min-w-[16rem]">
                 {HOME_CTA.label}
               </HomeLinkButton>
@@ -76,6 +77,14 @@ export function Hero() {
                 className="sm:min-w-[14rem]"
               >
                 Falar pelo WhatsApp
+              </HomeLinkButton>
+              <HomeLinkButton
+                href={HOME_COMPANY.instagramUrl}
+                variant="light"
+                external
+                className="sm:min-w-[14rem]"
+              >
+                Seguir no Instagram
               </HomeLinkButton>
             </div>
           </HomeReveal>

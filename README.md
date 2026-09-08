@@ -6,14 +6,16 @@ Produção: [https://3-j-caixas-entulhos-manaus.vercel.app](https://3-j-caixas-e
 
 ## Visão geral
 
-- **Entrada pública:** landing em `/` (SEO, galeria, FAQ, mapa, CTAs).
-- **Bio:** `/bio` para redes sociais.
-- **Locação:** `/confirmacao-alocacao` — formulário em 3 etapas (CNPJ opcional), aceite dos **Termos e Condições**, geração de protocolo no banco e WhatsApp na etapa final.
+- **Entrada pública:** landing em `/` (SEO, galeria, FAQ, mapa, CTAs de solicitação / WhatsApp / Instagram).
+- **Bio:** `/bio` para redes sociais; o CTA “Ir para o site” aponta para a landing (`/`).
+- **Locação:** `/confirmacao-alocacao` — formulário em 3 etapas (CNPJ opcional), exemplos visuais do que **não é permitido** (ex.: paredão), aceite dos **Termos e Condições**, geração de protocolo no banco e WhatsApp na etapa final.
 - **Documentos públicos:** Termos (`/confirmacao-alocacao/termos`) e Política de Privacidade LGPD (`/confirmacao-alocacao/privacidade`).
 - **Painel admin:** login com identidade visual da marca; dashboard; lista e detalhe de solicitações; registro do aceite dos termos; encaminhamento WhatsApp.
 - **PDF de proposta:** código preparado, UI desativada (`ADMIN_PROPOSAL_PDF_ENABLED = false` em `src/constants/admin.ts`).
 
 Permanência padrão da caixa: **3 dias úteis** (ultrapassar gera acréscimo).
+
+Na landing, o nome da marca (**3J Caixas Entulhos Manaus** e variantes) aparece em destaque na cor dourada padrão (`BrandText`).
 
 ## Stack
 
@@ -46,7 +48,7 @@ Requisito: Node.js ≥ 20.9.0.
 | `SUPABASE_SERVICE_ROLE_KEY` | **Somente servidor** | Inserts e painel (aceita `service_role` legada `eyJ...` ou `sb_secret_...`) |
 | `NEXT_PUBLIC_COMPANY_WHATSAPP` | Browser | WhatsApp da empresa (DDI + número, só dígitos). Padrão: `5592985946242` |
 | `NEXT_PUBLIC_SITE_URL` | Browser | URL pública do site (canonical, sitemap, Open Graph) |
-| `NEXT_PUBLIC_BIO_WEBSITE_URL` | Browser | Site institucional na `/bio` (opcional) |
+| `NEXT_PUBLIC_BIO_WEBSITE_URL` | Browser | Override do CTA “Ir para o site” na `/bio` (padrão: `/`) |
 | `NEXT_PUBLIC_BIO_INSTAGRAM_URL` | Browser | Instagram na `/bio` (opcional) |
 | `NEXT_PUBLIC_YOUTUBE_URL` | Browser | YouTube na `/bio` (opcional) |
 | `NEXT_PUBLIC_COMPANY_PHONE` | Browser | Telefone no PDF da proposta (opcional; futuro) |
@@ -54,9 +56,13 @@ Requisito: Node.js ≥ 20.9.0.
 | `UPSTASH_REDIS_REST_URL` | **Somente servidor** | Rate limit da API pública (opcional; Upstash) |
 | `UPSTASH_REDIS_REST_TOKEN` | **Somente servidor** | Token Upstash Redis (opcional) |
 
-Padrões da `/bio` e WhatsApp estão em `src/constants/bio.ts`. Endereço e mapa da landing (`HOME_COMPANY`, `HOME_MAPS`) estão em `src/constants/home.ts`. O perfil oficial no Google Maps é o mesmo em ambos: [maps.app.goo.gl/K4KQGPyK1nJ5nfpp8](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8).
+Padrões da `/bio` e WhatsApp estão em `src/constants/bio.ts`. Endereço, Instagram da landing e mapa (`HOME_COMPANY`, `HOME_MAPS`) estão em `src/constants/home.ts`. Exemplos de uso proibido da caixa (`FORBIDDEN_USAGE_EXAMPLES`) estão em `src/constants/termos-locacao.ts`.
+
+O perfil oficial no Google Maps: [maps.app.goo.gl/K4KQGPyK1nJ5nfpp8](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8).
 
 O número de WhatsApp oficial é **+55 92 98594-6242** (`5592985946242`). Usado na landing, na bio e no botão **Falar pelo WhatsApp** da etapa final de `/confirmacao-alocacao`.
+
+Instagram da landing: [@3_j_caixas_entulhos_manaus](https://www.instagram.com/3_j_caixas_entulhos_manaus) — CTAs no hero e no rodapé.
 
 Nunca prefixe `SUPABASE_SERVICE_ROLE_KEY` com `NEXT_PUBLIC_`.
 
@@ -75,8 +81,8 @@ Abre em [http://localhost:3000](http://localhost:3000).
 | `/` | Landing principal (entrada pública) |
 | `/bio` | Link in bio — redes sociais e CTAs |
 | `/inicio` | Redireciona para `/` (legado) |
-| `/confirmacao-alocacao` | Solicitação de locação (3 etapas) + WhatsApp na etapa final |
-| `/confirmacao-alocacao/termos` | Termos e Condições |
+| `/confirmacao-alocacao` | Solicitação de locação (3 etapas) + exemplos “não permitido” + WhatsApp na etapa final |
+| `/confirmacao-alocacao/termos` | Termos e Condições (com imagens de exemplo) |
 | `/confirmacao-alocacao/privacidade` | Política de Privacidade (LGPD) |
 | `/robots.txt` | Robots dinâmico |
 | `/sitemap.xml` | Sitemap dinâmico |
@@ -95,7 +101,7 @@ Login e sidebar do painel usam o logo oficial (`public/logos/logo-3j-oficial.jpg
 
 ### Fluxo público de locação
 
-1. Preencher dados (CNPJ opcional) e aceitar os Termos e Condições.
+1. Preencher dados (CNPJ opcional), ver exemplos do que não é permitido (ex.: paredão) e aceitar os Termos e Condições.
 2. Revisar informações da caixa (6 m³, permanência de 3 dias úteis).
 3. Confirmar — o servidor valida o payload (Zod), aplica rate limit e grava a solicitação com protocolo + aceite dos termos.
 4. Na etapa final, falar pelo WhatsApp e consultar a Política de Privacidade.
@@ -123,14 +129,14 @@ src/
 │   ├── sitemap.ts
 │   └── robots.ts
 ├── components/
-│   ├── home/               # Landing (animações, galeria, FAQ)
+│   ├── home/               # Landing (BrandText, galeria, FAQ, CTAs)
 │   ├── bio/
-│   ├── alocacao/           # Fluxo de solicitação + header da marca
+│   ├── alocacao/           # Fluxo + exemplos de uso proibido
 │   └── admin/              # Painel, login, filtros, formulários
 ├── constants/              # home, bio, alocacao, termos, privacidade, admin, site
 └── lib/                    # SEO, Supabase, rate limit, PDF, validação, LGPD helpers
 public/
-├── images/3j/              # Fotos da empresa
+├── images/3j/              # Fotos da empresa + exemplos “não permitido”
 ├── logos/                  # Logo oficial
 ├── videos/                 # Vídeo do serviço
 └── favicon.ico
@@ -205,9 +211,9 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 
 ### Checklist pós-deploy
 
-- Landing (`/`) — mapa embutido no perfil oficial da empresa
-- Bio (`/bio`) — mapa e link do Google Maps
-- Locação (com e sem CNPJ), Termos, Privacidade e WhatsApp na etapa final
+- Landing (`/`) — mapa oficial, CTAs (solicitação, WhatsApp, Instagram) no hero e no rodapé
+- Bio (`/bio`) — “Ir para o site” → `/`; mapa e Instagram/YouTube
+- Locação — exemplos “não permitido” (paredão), Termos, Privacidade e WhatsApp na etapa final
 - Login admin, dashboard, lista/filtros, detalhe com aceite dos termos e encaminhamento WhatsApp
 - Rate limit (opcional: confirmar Upstash em produção)
 
@@ -223,7 +229,7 @@ Após alterar qualquer `NEXT_PUBLIC_*`, faça um **novo deploy**.
 | Permanência padrão | 3 dias úteis |
 | Telefone / WhatsApp | (92) 98594-6242 (`5592985946242`) |
 | E-mail | jadaildodasilvagomes@gmail.com |
-| Instagram | [@3JCAIXASENTULHOSMANAUS](https://www.instagram.com/3JCAIXASENTULHOSMANAUS) |
+| Instagram | [@3_j_caixas_entulhos_manaus](https://www.instagram.com/3_j_caixas_entulhos_manaus) |
 | Endereço | Estrada do Tarumã – Tarumã, Manaus – AM, CEP 69041-650 |
 | Google Maps | [Perfil oficial 3J CAIXAS ENTULHOS MANAUS](https://maps.app.goo.gl/K4KQGPyK1nJ5nfpp8) |
 | Produção | https://3-j-caixas-entulhos-manaus.vercel.app |

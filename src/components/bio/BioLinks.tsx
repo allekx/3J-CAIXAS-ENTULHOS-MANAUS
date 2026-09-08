@@ -34,7 +34,7 @@ export function BioLinks() {
         title="Ir para o site"
         subtitle="Conheça a 3J Caixas Entulhos Manaus"
         icon={Globe}
-        external
+        external={BIO_LINKS.website.startsWith("http")}
       />
 
       <BioLinkButton

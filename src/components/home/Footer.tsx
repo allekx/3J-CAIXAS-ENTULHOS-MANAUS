@@ -143,14 +143,22 @@ export function Footer() {
               </a>
             </p>
 
-            <p className="mt-8">
+            <div className="mt-8 flex flex-col gap-3">
               <Link
                 href={HOME_CTA.href}
-                className="inline-flex min-h-11 items-center bg-brand-gold px-4 text-xs font-semibold tracking-wide text-brand-black uppercase transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-dark motion-reduce:hover:translate-y-0"
+                className="inline-flex min-h-11 items-center justify-center bg-brand-gold px-4 text-xs font-semibold tracking-wide text-brand-black uppercase transition-[background-color,transform] duration-200 hover:-translate-y-0.5 hover:bg-brand-gold-dark motion-reduce:hover:translate-y-0"
               >
                 Solicitar caixa coletora
               </Link>
-            </p>
+              <a
+                href={HOME_COMPANY.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center justify-center border border-brand-gold px-4 text-xs font-semibold tracking-wide text-brand-gold uppercase transition-[background-color,color,transform] duration-200 hover:-translate-y-0.5 hover:bg-brand-gold hover:text-brand-black motion-reduce:hover:translate-y-0"
+              >
+                Seguir no Instagram
+              </a>
+            </div>
           </div>
         </div>
 
